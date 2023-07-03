@@ -1,0 +1,53 @@
+Progress: resolved 0, reused 1, downloaded 0, added 0
+Progress: resolved 22, reused 22, downloaded 0, added 0
+Progress: resolved 98, reused 98, downloaded 0, added 0
+Progress: resolved 144, reused 142, downloaded 0, added 0
+Progress: resolved 193, reused 191, downloaded 0, added 0
+Progress: resolved 259, reused 258, downloaded 0, added 0
+Progress: resolved 340, reused 339, downloaded 0, added 0
+Progress: resolved 387, reused 386, downloaded 0, added 0
+Progress: resolved 507, reused 506, downloaded 0, added 0
+Progress: resolved 607, reused 606, downloaded 0, added 0
+Progress: resolved 700, reused 699, downloaded 0, added 0
+ WARN  deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+ WARN  deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+Progress: resolved 866, reused 865, downloaded 0, added 0
+ WARN  deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+Progress: resolved 923, reused 922, downloaded 0, added 0
+Already up to date
+Progress: resolved 923, reused 922, downloaded 0, added 0, done
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ @babel/plugin-syntax-flow 7.14.5
+│ └── ✕ missing peer @babel/core@^7.0.0-0
+├─┬ @babel/plugin-transform-react-jsx 7.14.9
+│ ├── ✕ missing peer @babel/core@^7.0.0-0
+│ └─┬ @babel/plugin-syntax-jsx 7.22.5
+│   └── ✕ missing peer @babel/core@^7.0.0-0
+├─┬ @testing-library/user-event 13.5.0
+│ └── ✕ missing peer @testing-library/dom@>=7.21.4
+└─┬ react-scripts 5.0.1
+  ├── ✕ missing peer typescript@"^3.2.1 || ^4"
+  ├─┬ eslint-config-react-app 7.0.1
+  │ ├── ✕ missing peer typescript@"*"
+  │ ├─┬ @typescript-eslint/eslint-plugin 5.60.1
+  │ │ ├── ✕ missing peer typescript@"*"
+  │ │ └─┬ @typescript-eslint/type-utils 5.60.1
+  │ │   ├── ✕ missing peer typescript@"*"
+  │ │   └─┬ @typescript-eslint/typescript-estree 5.60.1
+  │ │     ├── ✕ missing peer typescript@"*"
+  │ │     └─┬ tsutils 3.21.0
+  │ │       └── ✕ missing peer typescript@">=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta"
+  │ └─┬ @typescript-eslint/parser 5.60.1
+  │   └── ✕ missing peer typescript@"*"
+  └─┬ react-dev-utils 12.0.1
+    ├── ✕ missing peer typescript@>=2.7
+    └─┬ fork-ts-checker-webpack-plugin 6.5.3
+      └── ✕ missing peer typescript@">= 2.7"
+Peer dependencies that should be installed:
+  @babel/core@">=7.0.0-0 <8.0.0"
+  @testing-library/dom@>=7.21.4
+  typescript@">=3.2.1 <4.0.0 || >=4.0.0 <5.0.0"
+
+Done in 20.5s
