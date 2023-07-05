@@ -7,18 +7,75 @@ import {
   Show,
   Skeleton,
   Text,
+  Icon,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider, 
 } from "@chakra-ui/react";
 import { collection, getDocs } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { db } from "../firebase/config";
+import { FiSearch, FiEdit } from "react-icons/fi";
+import FilterProductEmployee from "../components/FilterProductEmployee";
 
 export default function PersonnelList() {
   const { user, userData } = useContext(AuthContext);
   const [personnel, setPersonnel] = useState([]);
   const [isPending, setIsPending] = useState(false);
+  const [searchName, setSearchName] = useState("");
+  const [filterValues, setFilterValues] = useState({ group1: 'nom', group2: 'asc' });
+  const sortedPersonnel = [...personnel];
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  const admins = sortedPersonnel.filter((personne) => personne.data().isAdmin === true);
+  console.log(admins)
+
+    const onFilterValueChange = (group, value) => {
+    setFilterValues((prevValues) => ({
+      ...prevValues,
+      [group]: value
+    }));
+
+  };
+  console.log(filterValues);
+
+          if(filterValues.group2 === "asc"){
+                if(filterValues.group1 === "nom"){
+                   sortedPersonnel.sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                }else if (filterValues.group1 === "Admin"){
+                  admins.sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                }
+                // else if (personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()))
+                //   return personnel;
+               }else if(filterValues.group2 === "desc"){
+                 if(filterValues.group1 === "nom"){
+                  sortedPersonnel.sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
+                }else if (filterValues.group1 === "Admin"){
+                  admins.sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
+                }
+
+               }
+
+
+
+//   const onFilterValueSelected=(filterValue)=>{
+// console.log(filterValue);
+//   }
+
   useEffect(() => {
     console.log("aaaaa");
     if (!user) {
@@ -41,12 +98,30 @@ export default function PersonnelList() {
     };
     getPersonnel();
   }, []);
+  
 
   return (
     <>
       {userData && (
         <Box p={{ base: 3, md: 10 }} minH="100vh">
           <Heading>Liste du personnel</Heading>
+          <Flex
+            mt='3'
+            justify="space-between">
+            <InputGroup width="400px">
+            <InputRightElement
+              children={<Icon as={FiSearch} />}
+              cursor="pointer"
+            />
+            <Input
+              placeholder="Rechercher un employé"
+              variant="flushed"
+              onChange={handleChange}
+            />
+          </InputGroup>
+
+          <FilterProductEmployee fonction={onFilterValueChange} filterValue={filterValues}  />
+          </Flex>
           <Container
             maxW="full"
             mt={5}
@@ -74,7 +149,29 @@ export default function PersonnelList() {
               </Show>
             </Flex>
             <Box>
-              {personnel.map((personnel) => (
+              {/* {personnel
+
+              .filter((personnel) =>{
+                if(searchName == ""){
+                  return personnel;
+                }else if (personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()) || 
+                personnel.data().lastName.toLowerCase().includes (searchName.toLowerCase()))
+                  return personnel;
+                }) */}
+            
+
+              {sortedPersonnel
+              
+               .filter((personnel) =>{
+                if(searchName == ""){
+                  return personnel;
+                }else if (personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()) || 
+                personnel.data().lastName.toLowerCase().includes (searchName.toLowerCase()))
+                  return personnel;
+                }) 
+              
+              
+              .map((personnel) => (
                 <Link key={personnel.id} to={personnel.id.toString()}>
                   <Flex
                     w="full"
@@ -104,7 +201,23 @@ export default function PersonnelList() {
                     </Show>
                   </Flex>
                 </Link>
-              ))}
+              ))
+              //     .sort((a, b) =>{
+              //     if(filterValues.group2 === "asc"){
+              //   if(filterValues.group1 === "nom"){
+              //      return a.lastName.localeCompare(b.lastName);
+              //   }
+              //   // else if (personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()))
+              //   //   return personnel;
+              //  }else if(filterValues.group2 === "desc"){
+              //    if(filterValues.group1 === "nom"){
+              //    return b.lastName.localeCompare(a.lastName);
+              //   }
+
+              //  }
+              
+              // })
+              }
               {isPending && (
                 <Flex direction="column" gap={3} mt={3}>
                   <Skeleton height="40px" />

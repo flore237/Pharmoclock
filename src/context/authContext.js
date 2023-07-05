@@ -25,9 +25,11 @@ export default function AuthContextProvider({ children }) {
   );
   // console.log(lastConnexionDate.toDate());
   const signup = (email, password, firstName, name, phoneNumber, isAdmin) =>
+  //creation de l'utilisateur
     createUserWithEmailAndPassword(auth, email, password).then(
       async (userCredential) => {
         // console.log(lastConnexionDate.toDate());
+        //ajout de l'user dans un document dans la collection users avec l'uid=userCredential.user.uid
         await setDoc(doc(db, "users", userCredential.user.uid), {
           email: userCredential.user.email,
           firstName: firstName,
@@ -53,6 +55,7 @@ export default function AuthContextProvider({ children }) {
       let lastConnexion = null;
       today = today.toDateString();
       const getUser = async (userId) => {
+        //recupere le document de l'utilisateur dans la collection users avec l'id userId
         const docSnap = await getDoc(doc(db, "users", userId));
         const firstConnexion = docSnap.data().firstConnexion;
         lastConnexion = docSnap
@@ -76,11 +79,14 @@ export default function AuthContextProvider({ children }) {
           await updateDoc(doc(db, "users", userId), {
             lastConnexion: serverTimestamp(),
           });
+
+          //cree la collection presences qu'on ajoute dans un document qui a pour uid l'uid de l'utilisateur connectee
           const docRef = await addDoc(collection(db, "presences"), {
             heureArrivee: serverTimestamp(),
             uid: user.uid,
           });
           // console.log(docRef.id);
+          //on update la collection users et sur l'user avec l'id userId on ajoute le champ todayPresenceId
           await updateDoc(doc(db, "users", userId), {
             todayPresenceId: docRef.id,
           });
@@ -92,6 +98,7 @@ export default function AuthContextProvider({ children }) {
         //   docSnap.data().lastConnexion.toDate().toDateString("en-GB")
         // );
         // console.log(today.toDateString());
+        //on passe les donnees contenu dans le document recuperee dans
         setUserData(docSnap.data());
       };
       getUser(user.uid);
@@ -101,6 +108,7 @@ export default function AuthContextProvider({ children }) {
   }, [user]);
 
   useEffect(() => {
+    //obtenir l'utilisateur actuel ou connectee
     const unsuscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoadingData(false);

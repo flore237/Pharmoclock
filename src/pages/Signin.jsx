@@ -3,6 +3,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputRightElement,
   Stack,
   Button,
   useColorModeValue,
@@ -15,11 +17,13 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { redirect, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 export default function Signin() {
   const { signin, user } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -128,13 +132,25 @@ export default function Signin() {
             </FormControl>
             <FormControl id="password" mb={2}>
               <FormLabel>Mot de passe</FormLabel>
+               <InputGroup>
               <Input
+               type={showPassword ? 'text' : 'password'}
                 rounded="md"
-                type="password"
                 focusBorderColor="purple.500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <InputRightElement h={'full'}>
+                  <Button
+                    variant={'ghost'}
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }>
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+
             </FormControl>
           </Box>
           <Box>
