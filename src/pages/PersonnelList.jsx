@@ -34,15 +34,15 @@ export default function PersonnelList() {
   const [isPending, setIsPending] = useState(false);
   const [searchName, setSearchName] = useState("");
   const [filterValues, setFilterValues] = useState({ group1: 'nom', group2: 'asc' });
-  const sortedPersonnel = [...personnel];
+  let sortedPersonnel = [...personnel];
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setSearchName(e.target.value);
   };
 
-  const admins = sortedPersonnel.filter((personne) => personne.data().isAdmin === true);
-  console.log(admins)
+  // const admins = sortedPersonnel.filter((personne) => personne.data().isAdmin === true);
+  // console.log(admins)
 
     const onFilterValueChange = (group, value) => {
     setFilterValues((prevValues) => ({
@@ -57,7 +57,13 @@ export default function PersonnelList() {
                 if(filterValues.group1 === "nom"){
                    sortedPersonnel.sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
                 }else if (filterValues.group1 === "Admin"){
-                  admins.sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                  sortedPersonnel = sortedPersonnel
+                  .filter(personnel => personnel.data().isAdmin === true)
+                  .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                }else{
+                  sortedPersonnel = sortedPersonnel
+                  .filter(personnel => personnel.data().isAdmin === false)
+                  .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
                 }
                 // else if (personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()))
                 //   return personnel;
@@ -65,7 +71,13 @@ export default function PersonnelList() {
                  if(filterValues.group1 === "nom"){
                   sortedPersonnel.sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
                 }else if (filterValues.group1 === "Admin"){
-                  admins.sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
+                  sortedPersonnel = sortedPersonnel
+                  .filter(personnel => personnel.data().isAdmin === true)
+                  .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
+                }else{
+                  sortedPersonnel = sortedPersonnel
+                  .filter(personnel => personnel.data().isAdmin === false)
+                  .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
                 }
 
                }
