@@ -11,14 +11,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider, 
+
 } from "@chakra-ui/react";
 import { collection, getDocs } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
@@ -65,6 +58,11 @@ export default function PersonnelList() {
                   .filter(personnel => personnel.data().isAdmin === false)
                   .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
                 }
+                //else{
+                //   sortedPersonnel = sortedPersonnel
+                //   .filter(personnel => personnel.data().isAdmin === intermediaire)
+                //   .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                // }
                 // else if (personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()))
                 //   return personnel;
                }else if(filterValues.group2 === "desc"){
@@ -79,6 +77,11 @@ export default function PersonnelList() {
                   .filter(personnel => personnel.data().isAdmin === false)
                   .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
                 }
+                // else{
+                //   sortedPersonnel = sortedPersonnel
+                //   .filter(personnel => personnel.data().isAdmin === intermediaire)
+                //   .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
+                // }
 
                }
 

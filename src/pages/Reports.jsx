@@ -1,4 +1,15 @@
-import { Box, Flex, Grid, Heading, Skeleton, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Heading, Skeleton, Text, Icon,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider, } from "@chakra-ui/react";
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import DashboardDayReport from "../components/DashboardDayReport";
 import {
@@ -13,6 +24,9 @@ import {
 import { db } from "../firebase/config";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import { FiSearch, FiEdit } from "react-icons/fi";
+import { Button } from "@chakra-ui/react";
+import { ChevronDownIcon,ChevronRightIcon } from '@chakra-ui/icons'
 
 export default function Reports() {
   const { user, userData } = useContext(AuthContext);
@@ -20,6 +34,25 @@ export default function Reports() {
   const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const [searchName, setSearchName] = useState("");
+  const [filterValues, setFilterValues] = useState( "all" );
+  let sortedMyReports = [...myReports];
+
+  const handleChange = (e) => {
+    setSearchName(e.target.value);
+  };
+
+
+  const onFilterValueChange = (value) => {
+  setFilterValues(value);
+
+  };
+     console.log("------------->> ici les filterValues");
+    console.log(filterValues);
+
+
+
+    ///
 
   useEffect(() => {
     if (!user) {
@@ -68,11 +101,103 @@ export default function Reports() {
     };
     getMyReports();
   }, []);
+
+
+  //Conditions pour le tri par Statut
+      if(filterValues === "all"){
+      sortedMyReports = sortedMyReports
+                  .filter(report => report.data().isReaded === true || report.data().isReaded === false )
+
+    }else if(filterValues === "Lu"){
+      sortedMyReports = sortedMyReports
+                  .filter(report => report.data().isReaded === true)
+
+    }else{
+      sortedMyReports = sortedMyReports
+                  .filter(report => report.data().isReaded === false)
+
+    }
   return (
     <Box p={userData.isAdmin ? { base: 4, md: 10 } : ""} minH="100vh">
       <Heading>
         {userData.isAdmin ? "Derniers rapports" : "Mes derniers rapports"}
       </Heading>
+     {userData.isAdmin ?
+      <Flex
+            mt='5'
+            justify={'space-between'}
+            >
+   
+    <InputGroup width="300px">
+            <InputRightElement
+              children={<Icon as={FiSearch} />}
+              cursor="pointer"
+            />
+            <Input
+            color={'purple.500'}
+              placeholder="Rechercher par employé"
+              variant="flushed"
+              onChange={handleChange}
+            />
+          </InputGroup>
+  <Box>
+      <Menu closeOnSelect={false}>
+        <MenuButton px={4} py={2} borderBottom='md' borderBottomWidth='1px' w='300px'>
+          -- Trier par -- <ChevronDownIcon />
+        </MenuButton>
+        <MenuList minWidth='240px'>
+          <MenuOptionGroup defaultValue={filterValues} title='Statut' type='radio' onChange={(value) => onFilterValueChange(value)}>
+      <MenuItemOption value='all'>Tout</MenuItemOption>
+      <MenuItemOption value='Lu'>Lu</MenuItemOption>
+      <MenuItemOption value='NLu'>Non Lu</MenuItemOption>
+        </MenuOptionGroup>
+         
+        </MenuList>
+      </Menu>
+      {/* <button onClick={handleApplyFilters}>Appliquer les filtres</button> */}
+    </Box>
+        
+        
+
+          <Flex>
+             <Input
+           type="date"
+              placeholder="jj/mm/aaaa"
+              variant="flushed"
+              onChange={handleChange}
+            />
+            <Text textAlign={'center'} mx={3} mt={2} fontWeight={'bold'} color={"purple.500"}>à </Text>
+
+             <Input
+           type="date"
+              placeholder="jj/mm/aaaa"
+              variant="flushed"
+              onChange={handleChange}
+            />
+            <Button color="purple.500" ml={3}><Icon as={FiSearch} /></Button>
+          </Flex>
+</Flex>
+          :
+          <Flex>
+             <Input
+           type="date"
+              placeholder="jj/mm/aaaa"
+              variant="flushed"
+              onChange={handleChange}
+            />
+            <Text textAlign={'center'} mx={3} mt={2} fontWeight={'bold'} color={"purple.500"}>à </Text>
+
+             <Input
+           type="date"
+              placeholder="jj/mm/aaaa"
+              variant="flushed"
+              onChange={handleChange}
+            />
+          </Flex>
+
+}
+          
+          
       <Grid
         templateColumns={{
           sm: "repeat(2, 1fr)",
@@ -82,7 +207,17 @@ export default function Reports() {
         gap={5}
         mt={8}
       >
-        {myReports.map((report) => (
+        {sortedMyReports
+        
+         .filter((report) =>{
+                if(searchName == ""){
+                  return report;
+                }else if (report.data().userFirstName.toLowerCase().includes (searchName.toLowerCase()) )
+                  return report;
+                }) 
+        
+        
+        .map((report) => (
           <Fragment key={report.id}>
             <DashboardDayReport
               id={report.id}

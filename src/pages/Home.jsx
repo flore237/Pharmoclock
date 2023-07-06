@@ -90,6 +90,7 @@ export default function Home() {
         const notReadedReport = snapshot.docs.filter(
           (report) => report.data().isReaded === false
         );
+        //faire une verification ici il yaune erreur inconnue
         const monthReports = snapshot.docs.filter(
           (report) =>
             report.data().createdAt.toDate().getMonth() === date.getMonth()
