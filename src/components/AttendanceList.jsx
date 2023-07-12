@@ -31,7 +31,9 @@ export default function AttendanceList(props) {
         </Text>
       </Flex>
       <Box>
-        {props.presences.map((presence) => (
+        {props.presences &&
+        
+        props.presences.map((presence) => (
           <Flex
             w="full"
             justify="space-between"
@@ -43,37 +45,38 @@ export default function AttendanceList(props) {
             borderBottom="1px solid"
             borderBottomColor="gray.300"
           >
-            <Text textAlign="center" flex={1}>
-              {today.toDateString("en-GB") ===
-              presence.data().heureArrivee.toDate().toDateString("en-GB")
-                ? "Aujourd'hui"
-                : presence
-                    .data()
-                    .heureArrivee.toDate()
-                    .toLocaleDateString("fr-FR", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                    })}
-            </Text>
-            <Text
-              textAlign="center"
-              flex={1}
-              color={
-                presence.data().heureArrivee.toDate().getHours() > 9 ||
-                (presence.data().heureArrivee.toDate().getHours() === 9 &&
-                  (presence.data().heureArrivee.toDate().getMinutes() > 0 ||
-                    presence.data().heureArrivee.toDate().getSeconds() > 0))
-                  ? "red.500"
-                  : ""
-              }
-            >
-              {presence
-                .data()
-                .heureArrivee.toDate()
-                .toLocaleTimeString("en-GB")}
-            </Text>
-            <Text
+              <Text textAlign="center" flex={1}>
+      {presence.data().heureArrivee &&
+      today.toDateString("en-GB") ===
+        presence.data().heureArrivee.toDate()?.toDateString("en-GB")
+          ? "Aujourd'hui"
+          : presence
+              .data()
+              .heureArrivee?.toDate()
+              .toLocaleDateString("fr-FR", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+              })}
+    </Text>
+    <Text
+      textAlign="center"
+      flex={1}
+      color={
+        presence.data().heureArrivee?.toDate()?.getHours() > 9 ||
+        (presence.data().heureArrivee?.toDate()?.getHours() === 9 &&
+          (presence.data().heureArrivee?.toDate()?.getMinutes() > 0 ||
+            presence.data().heureArrivee?.toDate()?.getSeconds() > 0))
+          ? "red.500"
+          : ""
+      }
+    >
+      {presence
+        .data()
+        .heureArrivee?.toDate()
+        .toLocaleTimeString("en-GB")}
+    </Text>
+  <Text
               textAlign="center"
               flex={1}
               color={

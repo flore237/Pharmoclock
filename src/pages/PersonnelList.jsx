@@ -20,6 +20,8 @@ import { AuthContext } from "../context/authContext";
 import { db } from "../firebase/config";
 import { FiSearch, FiEdit } from "react-icons/fi";
 import FilterProductEmployee from "../components/FilterProductEmployee";
+import { Center } from "@chakra-ui/react";
+import ReactPaginate from "react-paginate";
 
 export default function PersonnelList() {
   const { user, userData } = useContext(AuthContext);
@@ -30,6 +32,20 @@ export default function PersonnelList() {
   let sortedPersonnel = [...personnel];
   const navigate = useNavigate();
 
+
+    //pagination
+  const [pageNumber, setPageNumber] = useState(0);
+  const itemsPerPage = 5;
+  const pagesVisited = pageNumber * itemsPerPage;
+  const pageCount = Math.ceil(personnel.length / itemsPerPage);
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
+
+
+  // barre de recherche
   const handleChange = (e) => {
     setSearchName(e.target.value);
   };
@@ -121,7 +137,7 @@ export default function PersonnelList() {
         <Box p={{ base: 3, md: 10 }} minH="100vh">
           <Heading>Liste du personnel</Heading>
           <Flex
-            mt='3'
+            mt='5'
             justify="space-between">
             <InputGroup width="400px">
             <InputRightElement
@@ -184,7 +200,7 @@ export default function PersonnelList() {
                 personnel.data().lastName.toLowerCase().includes (searchName.toLowerCase()))
                   return personnel;
                 }) 
-              
+              // .slice(pagesVisited, pagesVisited + itemsPerPage)
               
               .map((personnel) => (
                 <Link key={personnel.id} to={personnel.id.toString()}>
@@ -242,7 +258,25 @@ export default function PersonnelList() {
                 </Flex>
               )}
             </Box>
+            
           </Container>
+              {sortedPersonnel && !isPending &&  
+    
+    <Center mt='5'>
+       
+            <ReactPaginate 
+              previousLabel={"<<"}
+              nextLabel={">>"}
+              pageCount={pageCount}
+              onPageChange={changePage}
+              containerClassName={"paginationBttns"}
+              previousLinkClassName={"previousBttn"}
+              nextLinkClassName={"nextBttn"}
+              disabledClassName={"paginationDisabled"}
+              activeClassName={"paginationActive"}
+            />
+          </Center>
+          }
         </Box>
       )}
     </>

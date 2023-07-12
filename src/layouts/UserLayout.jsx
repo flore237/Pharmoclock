@@ -31,23 +31,25 @@ export default function UserLayout() {
   const btnRef = useRef();
   const navigate = useNavigate();
 
-  const logout = async () => {
-    setDisconnecting(true);
-    console.log(userData.todayPresenceId);
+const logout = async () => {
+  setDisconnecting(true);
+  console.log(userData.todayPresenceId);
+
+  if (userData.todayPresenceId) { // Vérifie si la propriété existe
     await updateDoc(doc(db, "presences", userData.todayPresenceId), {
       heureDepart: serverTimestamp(),
     });
-    console.log(
-      "Modifier la presence d'aujourdhui pour ajouter l'heure de départ"
-    );
-    try {
-      await signOut(auth);
-      setDisconnecting(false);
-    } catch (error) {
-      alert("Pour certaines raison vous ne pouvez vous déconnecter");
-      setDisconnecting(false);
-    }
-  };
+    console.log("Modifier la presence d'aujourd'hui pour ajouter l'heure de départ");
+  }
+
+  try {
+    await signOut(auth);
+    setDisconnecting(false);
+  } catch (error) {
+    alert("Pour certaines raison vous ne pouvez vous déconnecter");
+    setDisconnecting(false);
+  }
+};
   return (
     <Box background="#f7f7fb" height="full" minH="100vh">
       {userData && (

@@ -24,20 +24,39 @@ import {
 import { db } from "../firebase/config";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineClose } from "react-icons/ai";
 import { FiSearch, FiEdit } from "react-icons/fi";
 import { Button } from "@chakra-ui/react";
-import { ChevronDownIcon,ChevronRightIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon,ChevronRightIcon } from '@chakra-ui/icons';
+import ReactPaginate from "react-paginate";
+import { Center } from "@chakra-ui/react";
 
 export default function Reports() {
   const { user, userData } = useContext(AuthContext);
   const [myReports, setMyReports] = useState([]);
+  const [initialReports, setInitialReports] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [searchName, setSearchName] = useState("");
   const [filterValues, setFilterValues] = useState( "all" );
   let sortedMyReports = [...myReports];
+  const [dateDebut, setDateDebut] = useState();
+  const [dateFin, setDateFin] = useState();
 
+  //pagination
+  const [pageNumber, setPageNumber] = useState(0);
+  const itemsPerPage = 5;
+  const pagesVisited = pageNumber * itemsPerPage;
+
+  const pageCount = Math.ceil(myReports.length / itemsPerPage);
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
+
+  // barre de recherche
   const handleChange = (e) => {
     setSearchName(e.target.value);
   };
@@ -47,12 +66,44 @@ export default function Reports() {
   setFilterValues(value);
 
   };
-     console.log("------------->> ici les filterValues");
-    console.log(filterValues);
+
+  //fonction pour reset les donnees initiales dans le filtres par date
+    const handleReset = () => {
+      // setDateDebut("");
+      // setDateFin("")
+      setMyReports(initialReports)
+  };
 
 
+// fonction qui permet de filtrer pour une periode de date
+    const handleApplyFilters = () => {
 
-    ///
+      // console.log(new Date(dateDebut).getTime() )
+      // // console.log(new Date(dateFin).getTime())
+      // const dateDebut_ = new Date(dateDebut).getTime() 
+      // const dateFin_ = new Date(dateFin).getTime() 
+      
+      if(dateDebut && dateFin){
+        sortedMyReports = initialReports
+        .filter(report => {
+      const createdAt = report.data().createdAt.toDate().toISOString().split("T")[0]
+      return createdAt >= dateDebut&& createdAt <= dateFin;
+    });
+    }
+    // else{
+    //   return "Aucuns rapports trouvés pour cette periode"
+    // }
+    // console.log(sortedMyReports)
+    setMyReports(sortedMyReports)
+    // setDateDebut("");
+    //   setDateFin("");
+  };
+
+
+    //  console.log("------------->> ici les filterValues");
+    // console.log(myReports);
+
+
 
   useEffect(() => {
     if (!user) {
@@ -79,6 +130,7 @@ export default function Reports() {
         try {
           const querySnapshot = onSnapshot(qAdmin, (snapshot) => {
             setMyReports(snapshot.docs);
+            setInitialReports(snapshot.docs);
             setIsPending(false);
           });
         } catch (error) {
@@ -91,6 +143,7 @@ export default function Reports() {
           const querySnapshot = await getDocs(q);
           // console.log(querySnapshot.docs[0].data());
           setMyReports(querySnapshot.docs);
+          setInitialReports(querySnapshot.docs);
           setIsPending(false);
         } catch (error) {
           // console.log(error.message);
@@ -126,6 +179,7 @@ export default function Reports() {
       <Flex
             mt='5'
             justify={'space-between'}
+            mb='5'
             >
    
     <InputGroup width="300px">
@@ -134,15 +188,18 @@ export default function Reports() {
               cursor="pointer"
             />
             <Input
-            color={'purple.500'}
+            borderBottonWidth={'2px'}
+            // borderColor={"purple.500"}
               placeholder="Rechercher par employé"
               variant="flushed"
               onChange={handleChange}
             />
           </InputGroup>
   <Box>
-      <Menu closeOnSelect={false}>
-        <MenuButton px={4} py={2} borderBottom='md' borderBottomWidth='1px' w='300px'>
+      <Menu>
+        <MenuButton px={4} py={2} borderBottom='md' borderBottomWidth='1px' w='300px'  
+        // borderColor={"purple.500"}
+        > 
           -- Trier par -- <ChevronDownIcon />
         </MenuButton>
         <MenuList minWidth='240px'>
@@ -164,7 +221,7 @@ export default function Reports() {
            type="date"
               placeholder="jj/mm/aaaa"
               variant="flushed"
-              onChange={handleChange}
+              onChange={(event) => setDateDebut(event.target.value)}
             />
             <Text textAlign={'center'} mx={3} mt={2} fontWeight={'bold'} color={"purple.500"}>à </Text>
 
@@ -172,18 +229,20 @@ export default function Reports() {
            type="date"
               placeholder="jj/mm/aaaa"
               variant="flushed"
-              onChange={handleChange}
+              onChange={(event) => setDateFin(event.target.value)}
             />
-            <Button color="purple.500" ml={3}><Icon as={FiSearch} /></Button>
+            <Button color="purple.500" ml={3} onClick={handleApplyFilters}><Icon as={FiSearch} /></Button>
+            <Button color="red.500" ml={3} onClick={handleReset}><Icon as={AiOutlineClose} /></Button>
+
           </Flex>
 </Flex>
           :
-          <Flex>
+          <Flex w='450px' justifyContent={'flex-end'} mt={'5'}>
              <Input
            type="date"
               placeholder="jj/mm/aaaa"
               variant="flushed"
-              onChange={handleChange}
+              onChange={(event) => setDateDebut(event.target.value)}
             />
             <Text textAlign={'center'} mx={3} mt={2} fontWeight={'bold'} color={"purple.500"}>à </Text>
 
@@ -191,8 +250,11 @@ export default function Reports() {
            type="date"
               placeholder="jj/mm/aaaa"
               variant="flushed"
-              onChange={handleChange}
+              onChange={(event) => setDateFin(event.target.value)}
             />
+            <Button color="purple.500" ml={3} onClick={handleApplyFilters}><Icon as={FiSearch} /></Button>
+            <Button color="red.500" ml={3} onClick={handleReset}><Icon as={AiOutlineClose} /></Button>
+
           </Flex>
 
 }
@@ -205,7 +267,7 @@ export default function Reports() {
           lg: "repeat(4, 1fr)",
         }}
         gap={5}
-        mt={8}
+        mt={10}
       >
         {sortedMyReports
         
@@ -215,7 +277,7 @@ export default function Reports() {
                 }else if (report.data().userFirstName.toLowerCase().includes (searchName.toLowerCase()) )
                   return report;
                 }) 
-        
+        // .slice(pagesVisited, pagesVisited + itemsPerPage)
         
         .map((report) => (
           <Fragment key={report.id}>
@@ -237,6 +299,9 @@ export default function Reports() {
             />
           </Fragment>
         ))}
+
+            
+          
         {isPending && (
           <Fragment>
             <Skeleton height="100px" rounded="md" />
@@ -251,6 +316,24 @@ export default function Reports() {
         )}
       </Grid>
       {error && <Text>Vous n'avez pas de rapports</Text>}
+
+    {myReports && !isPending &&  
+    
+    <Center mt='5'>
+       
+            <ReactPaginate 
+              previousLabel={"<<"}
+              nextLabel={">>"}
+              pageCount={pageCount}
+              onPageChange={changePage}
+              containerClassName={"paginationBttns"}
+              previousLinkClassName={"previousBttn"}
+              nextLinkClassName={"nextBttn"}
+              disabledClassName={"paginationDisabled"}
+              activeClassName={"paginationActive"}
+            />
+          </Center>
+          }
     </Box>
   );
 }

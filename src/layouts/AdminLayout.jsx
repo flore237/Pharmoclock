@@ -26,6 +26,7 @@ import {
   AiOutlineFileAdd,
   AiOutlineHome,
   AiOutlineUserAdd,
+  AiOutlineFileExclamation,
 } from "react-icons/ai";
 import { TbReportAnalytics } from "react-icons/tb";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -159,6 +160,17 @@ export default function AdminLayout() {
                         >
                           Créer un rapport
                         </Box>
+                         <Box
+                          py={2}
+                          onClick={() => {
+                            navigate("/missedreport");
+                            onClose();
+                          }}
+                          borderBottom="1px solid"
+                          borderBottomColor="gray.400"
+                        >
+                          Rapports journaliers manqués
+                        </Box>
                         <Box
                           py={2}
                           onClick={logout}
@@ -245,6 +257,20 @@ export default function AdminLayout() {
                         <IconButton
                           size="lg"
                           icon={<Icon boxSize={6} as={AiOutlineFileAdd} />}
+                        />
+                      </NavLink>
+                    )}
+                  </Tooltip>
+                   <Tooltip
+                    label="Rapports journaliers manqués"
+                    hasArrow
+                    placement="right"
+                  >
+                    {userData.isAdmin && (
+                      <NavLink to="/missedreport">
+                        <IconButton
+                          size="lg"
+                          icon={<Icon boxSize={6} as={AiOutlineFileExclamation} />}
                         />
                       </NavLink>
                     )}

@@ -15,6 +15,7 @@ import PersonnelDetails, {
 import PersonnelList from "./pages/PersonnelList";
 import Reports from "./pages/Reports";
 import Signin from "./pages/Signin";
+import MissedReports from "./pages/MissedReports";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="createreport" element={<CreateReport />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="missedreport" element={<MissedReports />} />
       </Route>
 
       <Route path="signin" element={<Signin />} />
