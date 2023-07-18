@@ -1,0 +1,32 @@
+Progress: resolved 0, reused 1, downloaded 0, added 0
+Progress: resolved 27, reused 27, downloaded 0, added 0
+Progress: resolved 35, reused 35, downloaded 0, added 0
+Progress: resolved 101, reused 101, downloaded 0, added 0
+Progress: resolved 143, reused 142, downloaded 0, added 0
+Progress: resolved 199, reused 197, downloaded 0, added 0
+Progress: resolved 218, reused 216, downloaded 0, added 0
+Progress: resolved 277, reused 275, downloaded 0, added 0
+Progress: resolved 373, reused 372, downloaded 0, added 0
+Progress: resolved 396, reused 395, downloaded 0, added 0
+Progress: resolved 496, reused 495, downloaded 0, added 0
+Progress: resolved 547, reused 546, downloaded 0, added 0
+Progress: resolved 636, reused 635, downloaded 0, added 0
+Progress: resolved 690, reused 689, downloaded 0, added 0
+ WARN  deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+ WARN  deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+Progress: resolved 804, reused 803, downloaded 0, added 0
+ WARN  deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+Progress: resolved 949, reused 948, downloaded 0, added 0
+Already up to date
+Progress: resolved 951, reused 950, downloaded 0, added 0, done
+
+ WARN  Issues with peer dependencies found
+.
+└─┬ @chakra-ui/theme 3.1.2
+  ├── ✕ missing peer @chakra-ui/styled-system@>=2.8.0
+  └─┬ @chakra-ui/theme-tools 2.0.18
+    └── ✕ missing peer @chakra-ui/styled-system@>=2.0.0
+Peer dependencies that should be installed:
+  @chakra-ui/styled-system@>=2.8.0
+
+Done in 22.3s

@@ -27,7 +27,9 @@ import {
   AiOutlineHome,
   AiOutlineUserAdd,
   AiOutlineFileExclamation,
+  AiOutlineUsergroupAdd,
 } from "react-icons/ai";
+import { LiaUsersSolid } from "react-icons/lia";
 import { TbReportAnalytics } from "react-icons/tb";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
@@ -171,6 +173,18 @@ export default function AdminLayout() {
                         >
                           Rapports journaliers manqués
                         </Box>
+                         <Box
+                          py={2}
+                          onClick={() => {
+                            navigate("/employeegroup");
+                            onClose();
+                          }}
+                          borderBottom="1px solid"
+                          borderBottomColor="gray.400"
+                        >
+                          Gérer les groupes d'employés
+                        </Box>
+                        
                         <Box
                           py={2}
                           onClick={logout}
@@ -200,7 +214,7 @@ export default function AdminLayout() {
                   <Tooltip label="Tableau de bord" hasArrow placement="right">
                     <NavLink to="/">
                       <IconButton
-                        size="lg"
+                        size="md"
                         icon={<Icon boxSize={6} as={AiOutlineHome} />}
                       />
                     </NavLink>
@@ -210,10 +224,10 @@ export default function AdminLayout() {
                     hasArrow
                     placement="right"
                   >
-                    {userData.isAdmin && (
+                    {userData.isAdmin === "admin" && (
                       <Link to="/addstaff">
                         <IconButton
-                          size="lg"
+                          size="md"
                           icon={<Icon boxSize={6} as={AiOutlineUserAdd} />}
                         />
                       </Link>
@@ -224,10 +238,10 @@ export default function AdminLayout() {
                     hasArrow
                     placement="right"
                   >
-                    {userData.isAdmin && (
+                    {userData.isAdmin === "admin" && (
                       <NavLink to="/personnel">
                         <IconButton
-                          size="lg"
+                          size="md"
                           icon={<Icon boxSize={6} as={FiUsers} />}
                         />
                       </NavLink>
@@ -238,10 +252,10 @@ export default function AdminLayout() {
                     hasArrow
                     placement="right"
                   >
-                    {userData.isAdmin && (
+                    {userData.isAdmin === "admin" && (
                       <NavLink to="/reports">
                         <IconButton
-                          size="lg"
+                          size="md"
                           icon={<Icon boxSize={6} as={TbReportAnalytics} />}
                         />
                       </NavLink>
@@ -252,10 +266,10 @@ export default function AdminLayout() {
                     hasArrow
                     placement="right"
                   >
-                    {userData.isAdmin && (
+                    {userData.isAdmin === "admin" && (
                       <NavLink to="/createreport">
                         <IconButton
-                          size="lg"
+                          size="md"
                           icon={<Icon boxSize={6} as={AiOutlineFileAdd} />}
                         />
                       </NavLink>
@@ -266,11 +280,25 @@ export default function AdminLayout() {
                     hasArrow
                     placement="right"
                   >
-                    {userData.isAdmin && (
+                    {userData.isAdmin === "admin" && (
                       <NavLink to="/missedreport">
                         <IconButton
-                          size="lg"
+                          size="md"
                           icon={<Icon boxSize={6} as={AiOutlineFileExclamation} />}
+                        />
+                      </NavLink>
+                    )}
+                  </Tooltip>
+                    <Tooltip
+                    label="Gérer les groupes d'employés"
+                    hasArrow
+                    placement="right"
+                  >
+                    {userData.isAdmin === "admin" && (
+                      <NavLink to="/employeegroup">
+                        <IconButton
+                          size="md"
+                          icon={<Icon boxSize={6} as={LiaUsersSolid} />}
                         />
                       </NavLink>
                     )}

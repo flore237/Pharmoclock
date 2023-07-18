@@ -11,11 +11,14 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, getDocs } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { db } from "../firebase/config";
+import { Select as Selects } from "chakra-react-select";
+import { Flex } from "@chakra-ui/layout";
+
 
 export default function CreateReport() {
   const [report, setReport] = useState("");
@@ -24,8 +27,13 @@ export default function CreateReport() {
   const [hasDifficulty, setHasDifficulty] = useState(false);
   const { isOpen, onToggle } = useDisclosure();
   const [difficulty, setDifficulty] = useState("");
+  const [group, setGroup] = useState([]);
+  const [option, setOption] = useState([]);
   const toast = useToast();
   const navigate = useNavigate();
+
+  console.log("option")
+  console.log(option)
 
   useEffect(() => {
     if (!user) {
@@ -43,6 +51,30 @@ export default function CreateReport() {
     //   difficulty,
     //   serverTimestamp()
     // );
+    if(userData.groupId){
+
+   group.map((group)=>
+   {
+      const create = async () => {
+      const docRef = await addDoc(collection(db, "reports"), {
+      uid: user.uid,
+      userFirstName: userData.firstName,
+      userLastName: userData.lastName,
+      report: report,
+      difficulty: difficulty,
+      createdAt: serverTimestamp(),
+      isReaded: false,
+      groupeId: group.value,
+      groupName: group.label,
+    });
+  }
+create();
+   }
+   )
+
+
+     }else{
+   
     const docRef = await addDoc(collection(db, "reports"), {
       uid: user.uid,
       userFirstName: userData.firstName,
@@ -52,6 +84,9 @@ export default function CreateReport() {
       createdAt: serverTimestamp(),
       isReaded: false,
     });
+
+     }
+    // console.log(docRef)
     setIsPending(false);
     toast({
       title: "Rapport envoyé",
@@ -64,8 +99,46 @@ export default function CreateReport() {
     setDifficulty("");
     // console.log(docRef);
   };
+
+        useEffect(() => {
+
+        const EmployeesTable = [];
+        const loadingCourse = async (q) => {
+          const querySnapshot = await getDocs(collection(db, "groups"));
+          if(userData.groupId){
+              userData.groupId.forEach((id)=>{
+                querySnapshot.docs.filter((groupe)=>{
+                    if(groupe.id === id){
+                 EmployeesTable.push({
+                label: groupe.data().name,
+                value: groupe.id,
+              });
+
+                    }
+                })
+                setOption(EmployeesTable)
+            
+            }
+              )
+
+
+          }
+          // if(querySnapshot.docs){
+          //   console.log("querySnapshot.docs")
+          //   console.log(querySnapshot.docs)
+          //   querySnapshot.docs.map((group, index) => {
+          //     EmployeesTable.push({
+          //       label: group.data().name,
+          //       value: group.id,
+          //     });
+          //   });
+          //   setOption(EmployeesTable)
+          // }
+        };
+        loadingCourse();
+      }, []);
   return (
-    <Box p={userData.isAdmin ? { base: 4, md: 10 } : ""} minH="100vh">
+    <Box p={userData.isAdmin === "admin" ? { base: 4, md: 10 } : ""} minH="100vh">
       <Heading>Rédiger un rapport</Heading>
       <Box as="form" onSubmit={handleSubmit}>
         <Text fontWeight="bold" mt={5}>
@@ -116,6 +189,26 @@ export default function CreateReport() {
             />
           </Box>
         </Collapse>
+{userData.groupId &&
+            <Box gap={5} mb={3} mt={3} flexWrap={{ base: "wrap", md: "nowrap" }}>
+        
+              <FormLabel fontWeight={"bold"}>Groupe(s)</FormLabel>
+                <Selects
+                    isMulti
+                    name="selectedCourse"
+                    value={group}
+                    onChange={setGroup}
+                    placeholder="Selectionner le groupe"
+                    options={option}
+                    isRequired
+                  >
+                      
+                  </Selects>
+    
+   
+          </Box>
+}
+
         <Button
           marginRight="auto"
           mt={3}

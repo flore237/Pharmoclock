@@ -24,7 +24,7 @@ export default function AuthContextProvider({ children }) {
     new Date("December 25, 2022 23:15:30")
   );
   // console.log(lastConnexionDate.toDate());
-  const signup = (email, password, firstName, name, phoneNumber, isAdmin) =>
+  const signup = (email, password, firstName, name, phoneNumber, isAdmin, group) =>
   //creation de l'utilisateur
     createUserWithEmailAndPassword(auth, email, password).then(
       async (userCredential) => {
@@ -38,6 +38,7 @@ export default function AuthContextProvider({ children }) {
           lastConnexion: lastConnexionDate,
           isAdmin: isAdmin,
           firstConnexion: true,
+          affectedGroup: group,
         });
         // console.log(lastConnexionDate.toDate());
         await signOut(auth);

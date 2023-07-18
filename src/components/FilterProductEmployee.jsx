@@ -44,7 +44,7 @@ function FilterProductEmployee(props) {
             <MenuItemOption value='nom'>Nom</MenuItemOption>
             <MenuItemOption value='Admin'>Admin</MenuItemOption>
             <MenuItemOption value='Employee'>Employee</MenuItemOption>
-            <MenuItemOption value='intermediaire'>Intermédiaire</MenuItemOption>
+            <MenuItemOption value='intermediaire'>Adjoint</MenuItemOption>
           </MenuOptionGroup>
           <MenuDivider />
           <MenuOptionGroup defaultValue={props.filterValue.group2} type='radio' onChange={(value) => props.fonction('group2', value)}>

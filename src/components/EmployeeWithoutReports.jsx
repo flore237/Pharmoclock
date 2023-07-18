@@ -82,7 +82,7 @@ function EmployeeWithoutReports(props) {
                     <Show above="md">
                       <Text flex={1}>
                         {personnel.data().lastName}{" "}
-                        {personnel.data().isAdmin && (
+                        {personnel.data().isAdmin === "admin" && (
                           <Badge colorScheme="purple" ml={1}>
                             Admin
                           </Badge>

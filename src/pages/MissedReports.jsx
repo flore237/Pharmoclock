@@ -33,7 +33,7 @@ import { FiSearch, FiEdit } from "react-icons/fi";
 import FilterProductEmployee from "../components/FilterProductEmployee";
 import { Center } from "@chakra-ui/react";
 import ReactPaginate from "react-paginate";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 
 
@@ -46,81 +46,55 @@ export default function MissedReports() {
   const [searchName, setSearchName] = useState("");
 
   let { state } = useLocation();
-
-console.log(state)
+      // console.log(state)
 
   const handleChangeName = (e) => {
     setSearchName(e.target.value);
   };
 
-
-
   const handleChange = () => {
 
-setIsPending(true);
-      const getEmployeesWithoutReports = async () => {
-  try {
+    setIsPending(true);
+    const getEmployeesWithoutReports = async () => {
+      try {
+        // Récupérer tous les employés de la collection "users"
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const userIds = querySnapshot.docs.map((doc) => doc.id);
+        // Récupérer les employés qui n'ont pas de rapport pour la date spécifiée
+        const employeesWithoutReports = [];
+        if(date){
+          for (const userId of userIds){
+            const q = query(
+              collection(db, "reports"),
+              where('uid', '==', userId),
+            );
+            const reportsSnapshot = await getDocs(q);
+            let sortedMyReport = reportsSnapshot.docs.filter((doc)=>
+              doc.data().createdAt.toDate().toISOString().split("T")[0] === date)
 
-    const querySnapshot = await getDocs(collection(db, "users"));
-    // Récupérer tous les employés de la collection "users"
-    // const usersSnapshot = await db.collection('users').get();
-    const userIds = querySnapshot.docs.map((doc) => doc.id);
+              if (sortedMyReport.length === 0) {
+                let userDocId = querySnapshot.docs.filter((doc) => {
+                  if(doc.id === userId){
+                    employeesWithoutReports.push(doc)
+                  }
+                  return null;
 
-    // Récupérer les employés qui n'ont pas de rapport pour la date spécifiée
-    const employeesWithoutReports = [];
-  
-   
-    // const currentDate = new Date();
-    if(date){
+                });
+              }
+          }
+          setReportNone(employeesWithoutReports)
+          setIsPending(false);
+          return employeesWithoutReports;
 
-     for (const userId of userIds) {
- 
-      const q = query(
-        collection(db, "reports"),
-        where('uid', '==', userId),
-      );
-
-      const reportsSnapshot = await getDocs(q);
-      
-
-          let sortedMyReport = reportsSnapshot.docs.filter((doc)=>
-          //!!!!!!mettre un if ici pour si la date est vide quand on soumet alors on setreportnone a vide
-
-         doc.data().createdAt.toDate().toISOString().split("T")[0] === date
-         )
-
-      if (sortedMyReport.length === 0) {
-        let userDocId = querySnapshot.docs.filter((doc) => {
-   if(doc.id === userId){
-employeesWithoutReports.push(doc)
+        }else{
+          setReportNone()
+          setIsPending(false);
         }
-        return null;
 
-        }
-     
-        
-        );
- 
-
-      }
-    }
-setReportNone(employeesWithoutReports)
-setIsPending(false);
-
-    return employeesWithoutReports;
-
-    }else{
-      setReportNone()
-      setIsPending(false);
-    }
-
-  } catch (error) {
-    console.error('Erreur lors de la récupération des employés sans rapport:', error);
-    return [];
-  }
-
-
-};
+      }catch (error) {
+        console.error('Erreur lors de la récupération des employés sans rapport:', error);
+        return [];
+      }};
 
     getEmployeesWithoutReports();
 
@@ -128,13 +102,11 @@ setIsPending(false);
 
 
 
- useEffect(() => {
-if(state){
-  setDate(state)
-  handleChange();
-}
-
-
+  useEffect(() => {
+    if(state){
+      setDate(state)
+      handleChange();
+    }
   }, [state]);
 
 
@@ -145,38 +117,31 @@ if(state){
       {userData && (
         <Box p={{ base: 3, md: 10 }} minH="100vh" w='full'>
           <Heading>Rapports journaliers manqués</Heading>
-      <Flex justify={'space-between'} mt={'7'} w='full'>
-        <Flex  w='500px' >
-          
-            <Text textAlign={'center'} mr={'3'} mt={2} color={"purple.500"}>Choisir une date : </Text>
+          <Flex justify={'space-between'} mt={'7'} w='full'>
+            <Flex  w='500px' >
+              <Text textAlign={'center'} mr={'3'} mt={2} color={"purple.500"}>Choisir une date : </Text>
+              <Input
+                type="date"
+                value={date}
+                w={'200px'}
+                onChange={(event) => setDate(event.target.value)}
+                />
+                <Button color="purple.500" ml={3} 
+                onClick={handleChange}
+                ><Icon as={FiSearch} /></Button>
 
-             <Input
-           type="date"
-           value={date}
-            //   placeholder="jj/mm/aaaa"
-            //   variant="flushed"
-              w={'200px'}
-              onChange={(event) => setDate(event.target.value)}
-            />
-            <Button color="purple.500" ml={3} 
-            onClick={handleChange}
-            ><Icon as={FiSearch} /></Button>
-            {/* <Button color="red.500" ml={3} onClick={handleReset}><Icon as={AiOutlineClose} /></Button> */}
-
-          </Flex>
-         <InputGroup width="300px">
-            <InputRightElement
-              children={<Icon as={FiSearch} />}
-              cursor="pointer"
-            />
-            <Input
-            borderBottonWidth={'2px'}
-            // borderColor={"purple.500"}
-              placeholder="Rechercher un employé"
-              variant="flushed"
-              onChange={handleChangeName}
-            />
-          </InputGroup>
+            </Flex>
+            <InputGroup width="300px">
+                <InputRightElement
+                  children={<Icon as={FiSearch} />}
+                  cursor="pointer"
+                />
+                <Input
+                  placeholder="Rechercher un employé"
+                  variant="flushed"
+                  onChange={handleChangeName}
+                />
+            </InputGroup>
           </Flex>
           <Container
             maxW="full"
@@ -205,23 +170,18 @@ if(state){
         
             <Box>
                 {!reportNone && !isPending &&
-                
                 <Text textAlign={'center'} mt={'3'}>Aucun(s) employé(s) pour cette date</Text>}
-            
 
-              {reportNone && !isPending &&
-
-              
-              reportNone
+                {reportNone && !isPending &&
+                  reportNone
 
                  .filter((personnel) =>{
-                if(searchName == ""){
-                  return personnel;
-                }else if (personnel.data().lastName.toLowerCase().includes (searchName.toLowerCase()) || personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()) )
-                  return personnel;
-                }) 
-              .map((personnel,index) => (
-                
+                    if(searchName == ""){
+                      return personnel;
+                    }else if (personnel.data().lastName.toLowerCase().includes (searchName.toLowerCase()) || personnel.data().firstName.toLowerCase().includes (searchName.toLowerCase()) )
+                      return personnel;
+                  }) 
+                  .map((personnel,index) => (
                   <Flex
                     w="full"
                     justify="space-between"
@@ -232,12 +192,11 @@ if(state){
                     // }}
                     borderBottom="1px solid"
                     borderBottomColor="gray.300"
-                    // cursor="pointer"
                   >
                     <Show above="md">
                       <Text flex={1}>
                         {personnel.data().lastName}{" "}
-                        {personnel.data().isAdmin && (
+                        {personnel.data().isAdmin === "admin" && (
                           <Badge colorScheme="purple" ml={1}>
                             Admin
                           </Badge>

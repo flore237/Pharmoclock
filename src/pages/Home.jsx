@@ -66,18 +66,18 @@ export default function Home() {
 
 
         console.log("--------->>>>>>>>")
-    console.log(reportNone)
+    console.log(presences)
 
 
   useEffect(() => {
     const getUser = async (userId) => {
       const docSnap = await getDoc(doc(db, "users", userId));
       setUserData(docSnap.data());
-      if (docSnap.data().isAdmin) {
+      if (docSnap.data().isAdmin === "admin") {
         const querySnapshot = await getDocs(collection(db, "users"));
         // console.log(querySnapshot.docs);
         const adminNumber = querySnapshot.docs.filter(
-          (person) => person.data().isAdmin
+          (person) => person.data().isAdmin === "admin"
         );
         // console.log(adminNumber.length);
         setAdminNumber(adminNumber.length);
@@ -85,6 +85,7 @@ export default function Home() {
         setEmployeList(querySnapshot.docs)
       }
     };
+
     if (!user) {
       // console.log("aaaa");
       navigate("/signin");
@@ -92,8 +93,9 @@ export default function Home() {
       getUser(user.uid);
     }
   }, [user]);
+
+
   useEffect(() => {
-  
 
     const date = new Date();
     
@@ -107,92 +109,75 @@ export default function Home() {
       setIsPending(true);
       const q = query(collection(db, "reports"), orderBy("createdAt", "desc"));
       const querySnapshot = onSnapshot(q, (snapshot) => {
+  
         setReports(snapshot.docs);
+        if(snapshot){
         // console.log(snapshot.docs[0].data().createdAt.toDate().getMonth());
         const notReadedReport = snapshot.docs.filter(
           (report) => report.data().isReaded === false
         );
+              console.log("avannnnnnnntttttt")
         //faire une verification ici il yaune erreur inconnue
         const monthReports = snapshot.docs.filter(
-          (report) =>
-            report.data().createdAt.toDate().getMonth() === date.getMonth()
-        );
+          (report) =>{
+          console.log("apprrrresssss")
+                     if(report.data().createdAt){
+         return report.data().createdAt.toDate().getMonth() === date.getMonth()
+        }
+        });
         setMonthReports(monthReports.length);
         setReportsNumber(notReadedReport.length);
-      });
-
-
-
-
-  }
-   
-
-const getEmployeesWithoutReports = async () => {
-   setIsPending(true);
-  try {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    // Récupérer tous les employés de la collection "users"
-    // const usersSnapshot = await db.collection('users').get();
-    const userIds = querySnapshot.docs.map((doc) => doc.id);
-    
-
-    // Récupérer les employés qui n'ont pas de rapport pour la date spécifiée
-    const employeesWithoutReports = [];
-  
-   
-    const currentDate = new Date();
-    const isoTimestamp = currentDate.toISOString();
-
-     for (const userId of userIds) {
- 
-      const q = query(
-        collection(db, "reports"),
-        where('uid', '==', userId),
+      }}
       );
 
-      const reportsSnapshot = await getDocs(q);
+
+
+
+  }
+   
+
+    const getEmployeesWithoutReports = async () => {
+      setIsPending(true);
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        // Récupérer tous les employés de la collection "users"
+        // const usersSnapshot = await db.collection('users').get();
+        const userIds = querySnapshot.docs.map((doc) => doc.id);
+        // Récupérer les employés qui n'ont pas de rapport pour la date spécifiée
+        const employeesWithoutReports = [];
+        const currentDate = new Date();
+
+        for (const userId of userIds) {
+
+          const q = query(
+            collection(db, "reports"),
+            where('uid', '==', userId),
+          );
+
+          const reportsSnapshot = await getDocs(q);
 
           let sortedMyReport = reportsSnapshot.docs.filter((doc)=>
-
-         doc.data().createdAt.toDate().toISOString().split("T")[0] === currentDate.toISOString().split("T")[0]
-         )
-
-      if (sortedMyReport.length === 0) {
-        let userDocId = querySnapshot.docs.filter((doc) => {
-   if(doc.id === userId){
-employeesWithoutReports.push(doc)
+            doc.data().createdAt.toDate().toISOString().split("T")[0] === currentDate.toISOString().split("T")[0]
+          )
+          if (sortedMyReport.length === 0) {
+            let userDocId = querySnapshot.docs.filter((doc) => {
+              if(doc.id === userId){
+                employeesWithoutReports.push(doc)
+              }
+              return null;
+            });
+          }
         }
-        return null;
+          setReportNone(employeesWithoutReports)
+          setIsPending(false);
 
+        return employeesWithoutReports;
+        } catch (error) {
+          console.error('Erreur lors de la récupération des employés sans rapport:', error);
+          return [];
         }
-     
-        
-        );
- 
 
-      }
-    }
-setReportNone(employeesWithoutReports)
-setIsPending(false);
-
-
-    return employeesWithoutReports;
-
-     
-
-  } catch (error) {
-    console.error('Erreur lors de la récupération des employés sans rapport:', error);
-    return [];
-  }
-
-};
-
-
-
-
-
-
-
+    };
 
     const getPresences = async () => {
       const querySnapshot = onSnapshot(q, (snapshot) => {
@@ -208,21 +193,19 @@ setIsPending(false);
     getPresences(q);
     getEmployeesWithoutReports();
   }, []);
-// console.log("reportNone")
 
-// console.log(reportNone)
 
   return (
     <Box minH="100vh">
       {user && userData && (
-        <Box p={userData.isAdmin ? { md: 10, base: 4 } : ""}>
+        <Box p={userData.isAdmin === "admin" ? { md: 10, base: 4 } : ""}>
           <Heading fontWeight="bold">
             Bonjour{" "}
             <Text as="span" color="purple.500">
               {userData.firstName} !
             </Text>
           </Heading>
-          {userData.isAdmin && (
+          {userData.isAdmin === "admin" && (
             <Text fontSize="xl" mt={2}>
               Bienvenue sur ton Tableau de bord. Tu es un{" "}
               <Text as="span" color="purple.600">
@@ -230,22 +213,47 @@ setIsPending(false);
               </Text>
             </Text>
           )}
-          {!userData.isAdmin && (
+          {userData.isAdmin === "employe" && presences &&(
+            <>
             <Text fontSize="xl" mt={2}>
               Bienvenue sur ton espace de présences. Tu es un{" "}
               <Text as="span" color="purple.600">
                 employé
               </Text>
             </Text>
-          )}
-          {!userData.isAdmin && presences && (
-            <AttendanceList
+
+                     <AttendanceList
               userData={userData}
               presences={presences}
               isPending={isPending}
             />
+            </>
           )}
-          {userData.isAdmin && (
+
+          {/* {userData.isAdmin === "employe" &&  (
+   
+          )} */}
+                           {userData.isAdmin === "adjoint" && (
+                            <>
+            <Text fontSize="xl" mt={2}>
+              Bienvenue sur ton espace de présences. Tu es un{" "}
+              <Text as="span" color="purple.600">
+                adjoint
+              </Text>
+            </Text>
+
+                 <AttendanceList
+              userData={userData}
+              presences={presences}
+              isPending={isPending}
+            />
+            
+            </>
+          )}
+           {/* {userData.isAdmin === "adjoint" && presences && (
+       
+          )} */}
+          {userData.isAdmin === "admin" && (
             <Box>
               <Grid
                 gap={6}
@@ -345,12 +353,12 @@ setIsPending(false);
                 </Grid>
               </Box>
   
-                      <Box mt={10} background="white" p={5} rounded="md" boxShadow="md">
+              <Box mt={10} background="white" p={5} rounded="md" boxShadow="md">
                 <Heading size="md" mb={5}>
                   Employés n'ayant pas déposés de rapport Aujourd'hui
-                   </Heading>
+                </Heading>
          
-     <Container
+          <Container
             maxW="full"
             mt={-3}
             background="white"
@@ -403,7 +411,7 @@ setIsPending(false);
                     <Show above="md">
                       <Text flex={1}>
                         {personnel.data().lastName}{" "}
-                        {personnel.data().isAdmin && (
+                        {personnel.data().isAdmin === "admin" && (
                           <Badge colorScheme="purple" ml={1}>
                             Admin
                           </Badge>

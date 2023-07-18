@@ -20,15 +20,20 @@ import { db } from "../firebase/config";
 
 export default function DashboardDayReport(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { userData } = useContext(AuthContext);
-  const handleClick = async (isReaded) => {
+ const { user, userData } = useContext(AuthContext);
+  const handleClick = async (isReaded, uid) => {
     onOpen();
-    if (!isReaded && userData.isAdmin) {
+    if (!isReaded && (userData.isAdmin === "admin" || userData.isAdmin === "adjoint") && uid === user.uid) {
       await updateDoc(doc(db, "reports", props.id), {
         isReaded: true,
       });
     }
   };
+
+  console.log(user)
+  console.log("user.uid")
+  console.log(props.uid)
+
   return (
     <Box
       background="white"
@@ -44,11 +49,11 @@ export default function DashboardDayReport(props) {
       }}
       boxShadow="md"
       cursor="pointer"
-      onClick={() => handleClick(props.isReaded)}
+      onClick={() => handleClick(props.isReaded, props.uid)}
     >
       <Flex align="center" justify="space-between">
         <Text fontWeight="bold">{props.name}</Text>
-        {!props.isReaded && userData.isAdmin && (
+        {!props.isReaded && (userData.isAdmin === "admin" || userData.isAdmin === "adjoint") && props.uid === user.uid && (
           <Badge colorScheme="purple">Non lu</Badge>
         )}
       </Flex>
@@ -65,6 +70,14 @@ export default function DashboardDayReport(props) {
         </Text>
         {props.body}
       </Text>
+      {props.groupe &&
+        <Text fontWeight="bold" color='blue.500'>
+        Groupe:{" "}
+        <Text as="span" fontWeight="normal" fontStyle="italic">
+          {props.groupe}
+        </Text>
+      </Text>
+      }
       <Modal
         isOpen={isOpen}
         onClose={onClose}

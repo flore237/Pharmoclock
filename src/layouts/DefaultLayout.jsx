@@ -35,8 +35,8 @@ export default function DefaultLayout() {
   };
   return (
     <>
-      {userData && userData.isAdmin && <AdminLayout />}
-      {userData && !userData.isAdmin && <UserLayout />}
+      {userData && userData.isAdmin === "admin" && <AdminLayout />}
+      {userData && userData.isAdmin  !== "admin" && <UserLayout />}
     </>
     // <Box background="#f7f7fb" height="full" minH="100vh">
     //   {userData && (
