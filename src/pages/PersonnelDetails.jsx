@@ -19,9 +19,11 @@ import { db } from "../firebase/config";
 
 export default function PersonnelDetails() {
   const { id } = useParams();
-  const { user } = useContext(AuthContext);
+  const { user,userData } = useContext(AuthContext);
   const [presences, setPresences] = useState([]);
   const [isPending, setIsPending] = useState(false);
+  console.log("presences")
+    console.log(presences)
 
   const personnel = useLoaderData();
   const navigate = useNavigate();
@@ -94,7 +96,7 @@ export default function PersonnelDetails() {
         </Text>
       </Container>
       <AttendanceList
-        userData={personnel}
+        userData={userData}
         presences={presences}
         isPending={isPending}
       />
