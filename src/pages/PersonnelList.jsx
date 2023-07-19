@@ -202,10 +202,11 @@ export default function PersonnelList() {
               color="white"
               fontWeight="bold"
             >
-              <Show above="md">
                 <Text flex={1}>Nom</Text>
+              
+              <Show above="md">
+                <Text flex={1}>Prenom</Text>
               </Show>
-              <Text flex={1}>prenom</Text>
               {/* <Text flex={1}>numero</Text> */}
               <Show above="md">
                 <Text flex={1}>Adresse email</Text>
@@ -351,7 +352,7 @@ const PersonnelElement = ({ personnel, index }) => {
                     borderBottomColor="gray.300"
                     cursor="pointer"
                   >
-                    <Show above="md">
+                
                       <Text flex={1}>
                         {personnel.data().lastName}{" "}
                         {personnel.data().isAdmin === "admin" && (
@@ -360,13 +361,14 @@ const PersonnelElement = ({ personnel, index }) => {
                           </Badge>
                         )}
                       </Text>
-                    </Show>
-                    <Text flex={1}>{personnel.data().firstName}</Text>
+                  <Show above="md">
+                    <Text flex={1}>{personnel.data().firstName}</Text></Show>
                     {/* <Text flex={1}>{personnel.data().phoneNumber}</Text> */}
                     <Show above="md">
-                      <Text flex={1}>{personnel.data().email}</Text>
+                       <Show above="md">
+                      <Text flex={1}>{personnel.data().email}</Text></Show>
                     </Show>
-                    <Show above="md" >
+                  
                       <Flex flex={1} gap={3} mt={1} margin="0 auto">
                           {/* <Tooltip
                           label="Détails"
@@ -466,7 +468,7 @@ const PersonnelElement = ({ personnel, index }) => {
                           {/* </Box> */}
                           {/* </Box> */}
                         </Box>
-                    </Show>
+                   
                     
                   </Flex>
 

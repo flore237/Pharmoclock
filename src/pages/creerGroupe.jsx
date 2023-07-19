@@ -151,8 +151,8 @@ export default function CreerGroupe() {
           
         setIsPending(false);
         toast({
-          title: "Groupe crée",
-          description: "Votre rapport a été envoyé avec succès",
+          title: "Groupe créé",
+          description: "Le groupe a été créé avec succès",
           status: "success",
           duration: 4000,
           isClosable: true,
