@@ -110,15 +110,15 @@ export default function PersonnelList() {
                }else if (filterValues.group1 === "Admin"){
                   sortedPersonnel = sortedPersonnel
                   .filter(personnel => personnel.data().isAdmin === "admin")
-                  .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                  .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
                 }else if (filterValues.group1 === "Employee"){
                   sortedPersonnel = sortedPersonnel
                   .filter(personnel => personnel.data().isAdmin === "employe")
-                  .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                  .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
                 }else{
                   sortedPersonnel = sortedPersonnel
                   .filter(personnel => personnel.data().isAdmin === "adjoint")
-                  .sort((a, b) => a.data().lastName.localeCompare(b.data().lastName));
+                  .sort((a, b) => b.data().lastName.localeCompare(a.data().lastName));
                 }
                 // else{
                 //   sortedPersonnel = sortedPersonnel
