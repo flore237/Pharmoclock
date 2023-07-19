@@ -321,6 +321,7 @@ export default function Home() {
                       <Fragment key={report.id}>
                         <Hide>{i++}</Hide>
                         <DashboardDayReport
+                        uid={user.uid}
                           id={report.id}
                           name={report.data().userLastName}
                           body={report.data().report}
