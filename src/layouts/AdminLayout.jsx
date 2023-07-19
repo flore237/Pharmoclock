@@ -58,7 +58,10 @@ export default function AdminLayout() {
     }
   };
   return (
-    <Box height="full" minH="100vh">
+    
+    <Box 
+    // height="full"
+     minH="100vh">
       {userData && (
         <Box
           background="#f7f7fb"

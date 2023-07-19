@@ -171,7 +171,12 @@ export default function PersonnelList() {
           <Flex
             mt='5'
             justify="space-between">
-            <InputGroup width="400px">
+            <InputGroup 
+            width={['60%', '80%', '70%', '100%']}
+            maxWidth="400px"
+            // mx="auto"
+            // my="auto"
+            >
             <InputRightElement
               children={<Icon as={FiSearch} />}
               cursor="pointer"
@@ -333,8 +338,8 @@ const PersonnelElement = ({ personnel, index }) => {
     // getPersonnel();
   };
     toast({
-      title: "Suppression du cyle.",
-      description: "Suppresion reussit.",
+      title: "Suppression réussie.",
+      description: "L'employé a été supprimé.",
       status: "success",
       duration: 3000,
       isClosable: true,
@@ -433,7 +438,14 @@ const PersonnelElement = ({ personnel, index }) => {
                             <AlertDialogOverlay
                             // alignSelf={"center"}
                             >
-                              <AlertDialogContent width={"380px"}>
+                              <AlertDialogContent 
+                              
+                              // width={"380px"}
+                              
+                              width={['90%', '80%', '70%', '100%']}
+                              maxWidth="380px"
+                              mx="auto"
+                              my="auto">
                                 <AlertDialogHeader
                                   fontSize="lg"
                                   fontWeight="bold"

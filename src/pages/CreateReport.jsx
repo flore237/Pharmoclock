@@ -97,6 +97,7 @@ create();
     });
     setReport("");
     setDifficulty("");
+    navigate("/report")
     // console.log(docRef);
   };
 

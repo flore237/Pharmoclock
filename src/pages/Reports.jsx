@@ -396,19 +396,25 @@ console.log("groupeeeeeee")
           </Flex>
         </Flex>
         
-        {admReports.length === 0 && !isPending &&
+      
+        
+        </>
+
+}
+  {userData.isAdmin === "admin" && admReports.length === 0 && !isPending &&
                 
                 <Text textAlign={'center'} mt={'3'}>Aucun(s) rapports recu(s) </Text>}
                  <Grid
         templateColumns={{
-          sm: "repeat(2, 1fr)",
-          md: "repeat(3, 1fr)",
-          lg: "repeat(4, 1fr)",
+           base: "repeat(1, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(3, 1fr)",
         }}
         gap={5}
         mt={2}
       >
-        {admReports && !isPending &&
+        {userData.isAdmin === "admin" && admReports && !isPending &&
         admReports
         
          .filter((report) =>{
@@ -453,10 +459,6 @@ console.log("groupeeeeeee")
           </Fragment>
         )}
       </Grid>
-        
-        </>
-
-}
 {userData.isAdmin === "employe" &&
 
           <Flex w='450px' justifyContent={'flex-end'} mt={'5'}>
@@ -486,9 +488,9 @@ console.log("groupeeeeeee")
       <Grid
         templateColumns={{
            base: "repeat(1, 1fr)",
-                    sm: "repeat(2, 1fr)",
-                    md: "repeat(3, 1fr)",
-                    lg: "repeat(4, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
         }}
         gap={5}
         mt={10}

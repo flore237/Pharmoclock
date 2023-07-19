@@ -358,7 +358,7 @@ export default function Home() {
                
                 <Show below='md'>
              <Heading size="md" mb={5}>
-                  Employés sans rapports Aujourd'hui
+                  Employés sans rapport déposés pour ce jour
                 </Heading>
           </Show>
           <Hide below='md'> <Heading size="md" mb={5}>

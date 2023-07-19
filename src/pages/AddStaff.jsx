@@ -122,6 +122,7 @@ export default function AddStaff() {
       // setPassword("")
       setName("");
       setFirstName("");
+      navigate("/personnel")
       // console.log(res);
       setIsloading(false);
     } catch (error) {
@@ -158,6 +159,7 @@ export default function AddStaff() {
       setPassword("");
       setName("");
       setFirstName("");
+      navigate("/personnel")
       // console.log(res);
       setIsloading(false);
     } catch (error) {
