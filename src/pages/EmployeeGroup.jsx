@@ -36,6 +36,7 @@ import ReactPaginate from "react-paginate";
 import { AiOutlineClose, AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
 import CreerGroupe from "./creerGroupe";
+import { Hide } from "@chakra-ui/media-query";
 
 function EmployeeGroup() {
 
@@ -82,7 +83,9 @@ function EmployeeGroup() {
           <Heading>Groupe d'employés</Heading>
       <Flex justify={'space-between'} mt={'7'} w='full'>
        
-         <InputGroup width="300px">
+
+        <Show below='md'>
+                 <InputGroup width="210px">
             <InputRightElement
               children={<Icon as={FiSearch} />}
               cursor="pointer"
@@ -93,8 +96,29 @@ function EmployeeGroup() {
               onChange={handleChange}
             />
           </InputGroup>
+
+          </Show>
+          
+          <Hide below='md'>
+       <InputGroup width="300px">
+            <InputRightElement
+              children={<Icon as={FiSearch} />}
+              cursor="pointer"
+            />
+            <Input
+              placeholder="Rechercher un groupe"
+              variant="flushed"
+              onChange={handleChange}
+            />
+          </InputGroup>
+          </Hide>
+  
+
           <CreerGroupe />
+
           </Flex>
+
+
           <Container
             maxW="full"
             mt={7}
@@ -110,9 +134,9 @@ function EmployeeGroup() {
               color="white"
               fontWeight="bold"
             >
-              <Show above="md">
-                <Text flex={1}>Nom</Text>
-              </Show>
+             
+                <Text flex={1}>Nom du groupe</Text>
+            
 
               <Show above="md">
                 <Text flex={1}>Description</Text>
@@ -149,11 +173,11 @@ function EmployeeGroup() {
                         borderBottomColor="gray.300"
                         cursor="pointer"
                     >
-                        <Show above="md">
+                       
                             <Text flex={1}>
                                 {group.data().name}{" "}
                             </Text>
-                        </Show>
+                        
                         <Show above="md">
                             <Text flex={1}>
                                 {group.data().description}

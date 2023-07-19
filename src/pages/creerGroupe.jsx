@@ -68,6 +68,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { useToast } from "@chakra-ui/react";
 import { IoIosAdd } from "react-icons/io";
 import { Select as Selects } from "chakra-react-select";
+import { Show } from "@chakra-ui/media-query";
 
 
 export default function CreerGroupe() {
@@ -194,13 +195,26 @@ export default function CreerGroupe() {
      <Center>
       <Box>
         <Box>
+          <Show below='md'>
+            <IconButton 
+            rounded={"full"}
+            background="purple.400"
+            color="white"
+            icon={<IoIosAdd size="30px" />}
+            onClick={onOpen}
+            
+            />
+
+          </Show>
+          <Hide below='md'>
+
           <Button
             ml={["20px", "50px", "100px", "600px"]}
             rightIcon={<Icon as={IoIosAdd} boxSize="20px" />}
             onClick={onOpen}
           >
             Ajouter un groupe
-          </Button>
+          </Button></Hide>
         </Box>
         <Box>
           <AlertDialog
@@ -209,10 +223,15 @@ export default function CreerGroupe() {
             onClose={onClose}
             closeOnOverlayClick={false}
             size="2xl"
+            // p={{ base: 4, md: 10 }}
           >
             <AlertDialogOverlay>
               <AlertDialogContent 
-              width={"500px"}
+
+                width={['90%', '80%', '70%', '100%']}
+                maxWidth="500px"
+                mx="auto"
+                my="auto"
             >
                 <Box as={"form"} 
                 onSubmit={handleSubmit}
@@ -229,7 +248,8 @@ export default function CreerGroupe() {
                   <Box mx="30px" pb={"15px"}>
                     <Divider />
                   </Box>
-                  <Box w="350px"  textAlign="center" gap={200} margin="0 auto">
+                  <Box width={['90%', '80%', '70%', '100%']}
+                maxWidth="350px"  textAlign="center" gap={200} margin="0 auto">
 
                     <Flex pb={"10px"}>
                         <FormControl>
@@ -283,7 +303,7 @@ export default function CreerGroupe() {
             
                   </Box>
 
-                  <Box mx="30px" pt="0px" pb={"15px"}>
+                  <Box mx="30px" pt="0px" pb={"15px"} mt='3'>
                     <Divider />
                   </Box>
                   <Center mb="6">

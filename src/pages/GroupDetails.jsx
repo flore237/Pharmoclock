@@ -123,11 +123,14 @@ export default function GroupDetails() {
               color="white"
               fontWeight="bold"
             >
+               <Text flex={1}>Nom</Text>
+              
               <Show above="md">
-                <Text flex={1}>Nom</Text>
-              </Show>
-              <Text flex={1}>prenom</Text>
-              <Text flex={1}>numero</Text>
+                <Text flex={1}>Prenom</Text>
+                </Show>
+               <Show above="md">
+                <Text flex={1}>Numero</Text>
+                </Show>
               <Show above="md">
                 <Text flex={1}>Adresse email</Text>
               </Show>
@@ -158,7 +161,7 @@ export default function GroupDetails() {
                     borderBottomColor="gray.300"
                     cursor="pointer"
                   >
-                    <Show above="md">
+                    
                       <Text flex={1}>
                         {personnel.data().lastName}{" "}
                         {personnel.data().isAdmin === "admin" && (
@@ -167,9 +170,11 @@ export default function GroupDetails() {
                           </Badge>
                         )}
                       </Text>
-                    </Show>
-                    <Text flex={1}>{personnel.data().firstName}</Text>
-                    <Text flex={1}>{personnel.data().phoneNumber}</Text>
+                    <Show above="md">
+                    <Text flex={1}>{personnel.data().firstName}</Text></Show>
+
+                    
+                    <Show above="md"><Text flex={1}>{personnel.data().phoneNumber}</Text></Show>
                     <Show above="md">
                       <Text flex={1}>{personnel.data().email}</Text>
                     </Show>

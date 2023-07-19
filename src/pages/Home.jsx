@@ -355,9 +355,15 @@ export default function Home() {
               </Box>
   
               <Box mt={10} background="white" p={5} rounded="md" boxShadow="md">
-                <Heading size="md" mb={5}>
-                  Employés n'ayant pas déposés de rapport Aujourd'hui
+               
+                <Show below='md'>
+             <Heading size="md" mb={5}>
+                  Employés sans rapports Aujourd'hui
                 </Heading>
+          </Show>
+          <Hide below='md'> <Heading size="md" mb={5}>
+                  Employés n'ayant pas déposés de rapport Aujourd'hui
+                </Heading></Hide>
          
           <Container
             maxW="full"

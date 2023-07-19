@@ -159,8 +159,12 @@ if(filterValues.group2 === name){
 
 
 
-     useEffect(() => {
-            const EmployeesTable = [];
+
+
+  useEffect(() => {
+       setIsPending(true);
+
+     const EmployeesTable = [];
 
             //foncton pour lister les rapports affectees
         const getMyGroups = async () => {
@@ -211,12 +215,11 @@ console.log("groupeeeeeee")
             }
         
         };
-        getMyGroups();
-     }, []);
 
-   useEffect(() => {
+
+
   const getReportsByGroup = async () => {
-    setIsPending(true);
+ 
 
     try {
             const groupsSnapshot = await getDocs(collection(db, "groups"));
@@ -270,19 +273,14 @@ console.log("groupeeeeeee")
       setReportAdmin(allReports);
       setInitialReport(allReports)
       setGroupeName(GroupName);
-      setIsPending(false);
+      // setIsPending(false);
     } catch (error) {
       setIsPending(false);
       setError(true);
     }
   };
 
-  getReportsByGroup();
-}, []);
 
-
-
-  useEffect(() => {
     const getMyReports = async () => {
       const q = query(
         collection(db, "reports"),
@@ -302,11 +300,11 @@ console.log("groupeeeeeee")
           const querySnapshot = onSnapshot(qAdmin, (snapshot) => {
             setMyReports(snapshot.docs);
             setInitialReports(snapshot.docs);
-            setIsPending(false);
+            // setIsPending(false);
           });
         } catch (error) {
           // console.log(error.message);
-          setIsPending(false);
+          // setIsPending(false);
           setError(true);
         }
       } else {
@@ -324,6 +322,10 @@ console.log("groupeeeeeee")
       }
     };
     getMyReports();
+    getReportsByGroup();
+    getMyGroups();
+
+
   }, []);
 
 
@@ -540,7 +542,7 @@ console.log("groupeeeeeee")
         )}
       </Grid>} 
 
-    {myReports && !isPending &&  (userData.isAdmin === "admin" || userData.isAdmin === "employe") &&
+    {(admReports || sortedMyReports) && !isPending &&  (userData.isAdmin === "admin" || userData.isAdmin === "employe") &&
     
     <Center mt='5'>
        
