@@ -367,7 +367,7 @@ console.log("groupeeeeeee")
               <MenuButton px={4} py={2} borderBottom='md' borderBottomWidth='1px' w='300px' > 
                 -- Trier par -- <ChevronDownIcon />
               </MenuButton>
-              <MenuList minWidth='240px' maxH={isScrollable ? "10rem" : undefined} overflowY={isScrollable ? "scroll" : undefined}>
+              <MenuList minWidth='240px' maxH={isScrollable ? "20rem" : undefined} overflowY={isScrollable ? "scroll" : undefined}>
                 <MenuOptionGroup defaultValue={filterValues.group1} title='Statut' type='radio' onChange={(value) => onFilterValueChange('group1', value)}>
                   <MenuItemOption value='all'>Tout</MenuItemOption>
                   <MenuItemOption value='Lu'>Lu</MenuItemOption>
