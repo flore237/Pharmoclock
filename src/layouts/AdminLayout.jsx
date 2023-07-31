@@ -14,6 +14,7 @@ import {
   useDisclosure,
   Tooltip,
 } from "@chakra-ui/react";
+
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +30,7 @@ import {
   AiOutlineFileExclamation,
   AiOutlineUsergroupAdd,
 } from "react-icons/ai";
-import { LiaUsersSolid } from "react-icons/lia";
+import { LiaUsersSolid } from "react-icons/lia"
 import { TbReportAnalytics } from "react-icons/tb";
 import { HamburgerIcon } from "@chakra-ui/icons";
 

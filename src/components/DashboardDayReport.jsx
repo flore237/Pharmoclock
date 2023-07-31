@@ -21,6 +21,7 @@ import { db } from "../firebase/config";
 export default function DashboardDayReport(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
  const { user, userData } = useContext(AuthContext);
+ 
   const handleClick = async (isReaded, uid) => {
     onOpen();
     if (!isReaded && (userData.isAdmin === "admin" || userData.isAdmin === "adjoint") && uid === user.uid) {
