@@ -72,13 +72,23 @@ export default function DashboardDayReport(props) {
         {props.body}
       </Text>
       {props.groupe &&
-        <Text fontWeight="bold" color='blue.500'>
+      <Text fontWeight="bold" color='blue.500'>
         Groupe:{" "}
         <Text as="span" fontWeight="normal" fontStyle="italic">
           {props.groupe}
         </Text>
       </Text>
       }
+      {/* {props.file && */}
+        <Text noOfLines={3}>
+          <Text as="span" fontWeight="bold">
+            piece jointe:{" "}
+          </Text>
+          <a href={props.file} target="_blank" rel="noreferrer">
+            Télécharger
+          </a>
+        </Text>
+      {/* } */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}

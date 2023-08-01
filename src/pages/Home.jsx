@@ -24,7 +24,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState, useRef } from "react";
 import { FiUsers } from "react-icons/fi";
 import { TbReportAnalytics } from "react-icons/tb";
 import { Navigate, useNavigate, Link } from "react-router-dom";
@@ -36,6 +36,7 @@ import { AuthContext } from "../context/authContext";
 import { db } from "../firebase/config";
 import { BsCalendarMonth } from "react-icons/bs";
 import { ViewIcon } from "@chakra-ui/icons";
+
 
 export default function Home() {
   const { user, userData, setUserData } = useContext(AuthContext);
@@ -56,7 +57,7 @@ export default function Home() {
   const lorem100 =
     "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus provident enim, reprehenderit voluptatem sapiente accusantium non harum fugit repudiandae exercitationem ex tempore nesciunt quis sequi. Inventore debitis exercitationem sunt hic, laudantium modi, maxime placeat earum amet eos quos molestias facilis, harum voluptatum assumenda dolores quisquam quam. Enim praesentium facere officia minima dolore vel, cum neque ducimus placeat aliquid eum quisquam sed aliquam officiis labore iure perspiciatis earum recusandae provident animi. Atque aut saepe odio labore inventore enim id tempora qui vitae tenetur, ea autem nostrum maxime rerum laboriosam cupiditate sapiente! Ad odio ullam laboriosam id, maiores doloremque eligendi. Deserunt, officia?";
   // const [userData, setUserData] = useState(null);
-
+ 
   // console.log("--------->userIds")
   //   console.log(userIds)
   const navigate = useNavigate();
@@ -222,7 +223,7 @@ export default function Home() {
               </Text>
             </Text>
 
-                     <AttendanceList
+            <AttendanceList
               userData={userData}
               presences={presences}
               isPending={isPending}
@@ -242,7 +243,7 @@ export default function Home() {
               </Text>
             </Text>
 
-                 <AttendanceList
+            <AttendanceList
               userData={userData}
               presences={presences}
               isPending={isPending}
@@ -254,7 +255,7 @@ export default function Home() {
        
           )} */}
           {userData.isAdmin === "admin" && (
-            <Box>
+            <Box >
               <Grid
                 gap={6}
                 w="full"
