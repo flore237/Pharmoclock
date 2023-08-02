@@ -28,6 +28,7 @@ import {ref, getDownloadURL, uploadBytes  } from "firebase/storage";
 
 export default function CreateReport() {
   const [report, setReport] = useState("");
+  const [title, setTitle] = useState("");
   const [isPending, setIsPending] = useState(false);
   const { user, userData } = useContext(AuthContext);
   const [hasDifficulty, setHasDifficulty] = useState(false);
@@ -107,6 +108,7 @@ export default function CreateReport() {
       uid: user.uid,
       userFirstName: userData.firstName,
       userLastName: userData.lastName,
+      title: title,
       report: report,
       difficulty: difficulty,
       createdAt: serverTimestamp(),
@@ -125,6 +127,7 @@ export default function CreateReport() {
       uid: user.uid,
       userFirstName: userData.firstName,
       userLastName: userData.lastName,
+      report: report,
       report: report,
       difficulty: difficulty,
       createdAt: serverTimestamp(),
@@ -189,12 +192,29 @@ export default function CreateReport() {
         loadingCourse();
       }, []);
   return (
-    <Box p={userData.isAdmin === "admin" ? { base: 4, md: 10 } : ""} minH="100vh">
+    <Box 
+      p={userData.isAdmin === "admin" ? { base: 4, md: 10 } : ""} 
+      minH="100vh" 
+      pb={{base:3, md:0}}
+    >
       <Heading>Rédiger un rapport</Heading>
-      <Box as="form" onSubmit={handleSubmit}>
-        <Text fontWeight="bold" mt={5}>
+      <Text fontWeight="bold" mt={5} mb={3}>
           Ce qui a été fait aujourd'hui:
-        </Text>
+      </Text>
+      <Box 
+        as="form" 
+        onSubmit={handleSubmit} 
+        bg={"white"} 
+        p={{base:3, md:5}} 
+        rounded={"md"}
+        width={{base:"320px", md:"800px"}}
+      >
+        <Input 
+          variant='flushed' 
+          placeholder='[Titre du document]'  
+          p={4}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <Textarea
           required
           mt={2}
@@ -208,6 +228,7 @@ export default function CreateReport() {
           boxShadow="md"
           maxLength={500}
           p={4}
+          placeholder="[Contenu]"
         />
         <Box mt={5} display="flex">
           <FormLabel htmlFor="difficulty">
@@ -295,15 +316,18 @@ export default function CreateReport() {
             />
           </Tooltip>
         </Box>
-        <Button
-          marginRight="auto"
-          mt={3}
-          type="submit"
-          colorScheme="purple"
-          isLoading={isPending}
-        >
-          Envoyer
-        </Button>
+          
+        <Box > 
+          <Button
+            marginRight="auto"
+            mt={3}
+            type="submit"
+            colorScheme="purple"
+            isLoading={isPending}
+          >
+            Envoyer
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

@@ -67,6 +67,12 @@ export default function DashboardDayReport(props) {
       </Text>
       <Text noOfLines={3}>
         <Text as="span" fontWeight="bold">
+          Titre:{" "}
+        </Text>
+        {/* {props.title} */} ..
+      </Text>
+      <Text noOfLines={3}>
+        <Text as="span" fontWeight="bold">
           Rapport:{" "}
         </Text>
         {props.body}

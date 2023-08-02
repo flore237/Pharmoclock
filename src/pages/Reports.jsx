@@ -544,6 +544,7 @@ console.log(myReports);
               id={report.id}
               name={userData.isAdmin === "admin" ? report.data().userFirstName : ""}
               isReaded={report.data().isReaded}
+              // title={report.value.data().title}
               body={report.data().report}
               difficulties={report.data().difficulty}
               date={report
