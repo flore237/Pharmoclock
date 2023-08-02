@@ -170,10 +170,8 @@ export default function CreateReport() {
                     }
                 })
                 setOption(EmployeesTable)
-            
             }
               )
-
 
           }
           // if(querySnapshot.docs){

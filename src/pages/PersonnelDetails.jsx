@@ -20,7 +20,9 @@ import { TfiFilter, TfiPrinter } from "react-icons/tfi";
 import ReactToPrint from "react-to-print";
 import ReactToPdf from "react-to-pdf";
 
-export default function PersonnelDetails() {
+//  const PersonnelDetails = forwardRef((props, ref) => {
+ const PersonnelDetails = () => {
+
   const { id } = useParams();
   const { user,userData } = useContext(AuthContext);
   const [presences, setPresences] = useState([]);
@@ -32,12 +34,13 @@ export default function PersonnelDetails() {
   const navigate = useNavigate();
 
   const componentRef = useRef();
-  const ref = React.forwardRef();
+  // const ref = React.createRef();
   const options = {
     orientation: "landscape",
     // unit: 'mm',
     // format: 'a4',
   };
+
   useEffect(() => {
     if (!user) {
       navigate("/signin");
@@ -72,44 +75,52 @@ export default function PersonnelDetails() {
         />
         <Heading>Profil</Heading>
       </Flex>
-      <Flex width={"full"} marginLeft={"auto"}>
-        <ReactToPrint
-          trigger={() => (
-            <Tooltip label="Imprimer les pressences de l'employé" fontSize={"11px"}  placement='top'> 
-              <Icon
-                as={TfiPrinter}
-                boxSize="45px"
-                alignItems={"center"}
-                p="3"
-              />
-            </Tooltip>
-          )}
-          content={() => componentRef.current}
-          documentTitle="Presences de l'employé"
-          pageStyle="print"
-        />
-        <ReactToPdf
-          targetRef={componentRef}
-          filename="Presences de l'employé"
-          options={options}
-          y={10}
-        >
-          {({ toPdf }) => (
-            <Tooltip label="Télechqrger les pressences de l'employé" fontSize={"11px"}  placement='top'> 
-              <Button
-                bg={"blackAlpha.100"}
-                onClick={toPdf}
-                border="1px"
-                width={"1px"}
-                fontSize={"12px"}
-              >
-                PDF
-              </Button>
+      <Box width={"full"}> 
+        <Flex  gap={2} align={"center"} justifyContent={"right"}>
+       
+          <ReactToPrint
+            trigger={() => (
+                <Icon
+                  as={TfiPrinter}
+                  boxSize="20px"
+                  alignItems={"center"}
+                  _hover={{ color: "gray.400" }}
+                />
+            )}
+            content={() => componentRef.current}
+            documentTitle="Presences de l'employé"
+            pageStyle="print"
+          />
+          <ReactToPdf
+            targetRef={componentRef}
+            filename="Presences de l'employé"
+            options={options}
+            // y={10}
+            // p={0}
+          >
+            {({ toPdf }) => (
+              <Tooltip 
+                label="Télecharger ses presences" 
+                fontSize={"11px"}  
+                placement='top'
+              > 
+                <Button
+                  bg={"blackAlpha.100"}
+                  onClick={toPdf}
+                  border="1px"
+                  // width={"1px"}
+                  fontSize={"9px"}
+                  size={"xs"}
+                  _hover={{ background: "gray.400" }}
+                  //  p={0}
+                >
+                  PDF
+                </Button>
               </Tooltip>
-
-          )}
-        </ReactToPdf>
-             </Flex>
+            )}
+          </ReactToPdf>
+        </Flex>
+      </Box>
       <Box ref={componentRef}> 
         <Container
           background="white"
@@ -153,7 +164,6 @@ export default function PersonnelDetails() {
     </Box>
   );
 }
-
 export const PersonnelDetailsLoader = async ({ params }) => {
   const { id } = params;
   const docRef = doc(db, "users", id);
@@ -161,3 +171,6 @@ export const PersonnelDetailsLoader = async ({ params }) => {
 
   return docSnap;
 };
+
+export default PersonnelDetails;
+
