@@ -37,7 +37,7 @@ export default function Reports() {
   const { user, userData } = useContext(AuthContext);
   const [myReports, setMyReports] = useState([]);
   const [initialReports, setInitialReports] = useState([]);
-    const [initialReport, setInitialReport] = useState([]);
+  const [initialReport, setInitialReport] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -49,7 +49,7 @@ export default function Reports() {
   const [affectedReports, setAffectedReports] = useState([]);
   const [reportAdmin, setReportAdmin] = useState([]);
     const [groupeName, setGroupeName] = useState([]);
-      let admReports = [...reportAdmin];
+    let admReports = [...reportAdmin];
 
 
   console.log("nameGroupe")
@@ -77,8 +77,8 @@ console.log(groupeName)
       [group]: value
     }));
 
-console.log(group)
-console.log(value)
+    console.log(group)
+    console.log(value)
 
 
 
@@ -141,13 +141,13 @@ if(filterValues.group2 === name){
       sortedMyReports = initialReports
       .filter(report => {
         const createdAt = report.data().createdAt.toDate().toISOString().split("T")[0]
-        return createdAt >= dateDebut&& createdAt <= dateFin;
+        return createdAt >= dateDebut && createdAt <= dateFin;
       });
 
-            admReports = initialReport
+     admReports = initialReport
       .filter(report => {
         const createdAt = report.value.data().createdAt.toDate().toISOString().split("T")[0]
-        return createdAt >= dateDebut&& createdAt <= dateFin;
+        return createdAt >= dateDebut && createdAt <= dateFin;
       });
     }
     setMyReports(sortedMyReports)
@@ -223,7 +223,6 @@ if(filterValues.group2 === name){
 
   const getReportsByGroup = async () => {
  
-
     try {
             const groupsSnapshot = await getDocs(collection(db, "groups"));
 //       const usersSnapshot = await getDocs(collection(db, "users"));
@@ -286,12 +285,13 @@ if(filterValues.group2 === name){
       const getMyReports = async () => {
 
         // try{ 
-            const q = query(
-              collection(db, "reports"),
-              where("uid", "==", user.uid),
-              orderBy("createdAt", "desc"),
-              limit(16)
-            );
+      const q = query(
+        collection(db, "reports"),
+        where("uid", "==", user.uid),
+        orderBy("createdAt", "desc"),
+        limit(16)
+      );
+
       const qAdmin = query(
         collection(db, "reports"),
         orderBy("createdAt", "desc"),
@@ -480,7 +480,6 @@ console.log(myReports);
         ))}
 
             
-          
         {isPending && (
           <Fragment>
             <Skeleton height="100px" rounded="md" />

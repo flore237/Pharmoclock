@@ -1,0 +1,67 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+
+
+}
+
+.paginationBttns {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.paginationBttns a {
+  padding: 2px;
+  margin: 8px;
+  border-radius: 3px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.paginationBttns a:hover {
+  color: white;
+  background-color: rgb(73, 74, 75);
+}
+
+.paginationActive a {
+  color: green;
+  /* background-color: rgb(27, 29, 30); */
+}
+
+.nextBttn {
+  background-color: lightgray;
+  
+}
+.previousBttn {
+  background-color: lightgray;
+}
+
+@media print {
+  /* Appliquer l'ajustement exact des couleurs lors de l'impression */
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+}
