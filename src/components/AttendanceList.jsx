@@ -1,19 +1,30 @@
 import { Box, Container, Flex, Skeleton, Text } from "@chakra-ui/react";
+import {TfiPrinter } from "react-icons/tfi";
+import ReactToPrint from "react-to-print";
+import ReactToPdf from "react-to-pdf";
+import React, { useRef } from "react";
 
 export default function AttendanceList(props) {
   const today = new Date();
+  const componentRef = useRef();
+  const ref = React.createRef();
+  const options = {
+    orientation: "landscape",
+    // unit: 'mm',
+    // format: 'a4',
+  };
   return (
   <>
     {props.userData.isAdmin === "admin" && 
   
        <Container
-      maxW={"container.lg"}
-      mt={8}
-      px={0}
-      background="white"
-      p={5}
-      boxShadow="md"
-      rounded="md"
+          maxW={"container.lg"}
+          mt={8}
+          px={0}
+          background="white"
+          p={5}
+          boxShadow="md"
+          rounded="md"
     >
       <Flex
         w="full"

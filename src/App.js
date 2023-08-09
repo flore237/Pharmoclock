@@ -29,13 +29,13 @@ const router = createBrowserRouter(
       <Route path="/" element={<DefaultLayout />}>
         <Route index element={<Home />} />
           <Route path="addstaff">
-          <Route index element={<AddStaff />} />
-          <Route
-            path=":id"
-            element={<AddStaff />}
-            loader={UserLoader}
-          />
-        </Route>
+            <Route index element={<AddStaff />} />
+            <Route
+              path=":id"
+              element={<AddStaff />}
+              loader={UserLoader}
+            />
+          </Route>
         <Route path="personnel">
           <Route index element={<PersonnelList />} />
           <Route
@@ -58,7 +58,6 @@ const router = createBrowserRouter(
           />
         </Route>
       </Route>
-
       <Route path="signin" element={<Signin />} />
       <Route path="*" element={<NotFound />} />
     </Route>

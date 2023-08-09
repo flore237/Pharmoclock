@@ -12,7 +12,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-
 } from "@chakra-ui/react";
 
 function EmployeeWithoutReports(props) {
@@ -42,7 +41,7 @@ function EmployeeWithoutReports(props) {
               <Show above="md">
                 <Text flex={1}>Adresse email</Text>
               </Show> */}
-            {/* </Flex> */} */}
+            {/* </Flex> */} 
             <Box>
               {/* {personnel
 

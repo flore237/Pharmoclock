@@ -61,7 +61,6 @@ console.log(affectedReports)
     setPageNumber(selected);
   };
 
-
   // barre de recherche
   const handleChange = (e) => {
     setSearchName(e.target.value);

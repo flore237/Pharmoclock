@@ -21,6 +21,7 @@ import { db } from "../firebase/config";
 export default function DashboardDayReport(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
  const { user, userData } = useContext(AuthContext);
+ 
   const handleClick = async (isReaded, uid) => {
     onOpen();
     if (!isReaded && (userData.isAdmin === "admin" || userData.isAdmin === "adjoint") && uid === user.uid) {
@@ -66,18 +67,34 @@ export default function DashboardDayReport(props) {
       </Text>
       <Text noOfLines={3}>
         <Text as="span" fontWeight="bold">
+          Titre:{" "}
+        </Text>
+        {/* {props.title} */} ..
+      </Text>
+      <Text noOfLines={3}>
+        <Text as="span" fontWeight="bold">
           Rapport:{" "}
         </Text>
         {props.body}
       </Text>
       {props.groupe &&
-        <Text fontWeight="bold" color='blue.500'>
+      <Text fontWeight="bold" color='blue.500'>
         Groupe:{" "}
         <Text as="span" fontWeight="normal" fontStyle="italic">
           {props.groupe}
         </Text>
       </Text>
       }
+      {/* {props.file && */}
+        <Text noOfLines={3}>
+          <Text as="span" fontWeight="bold">
+            piece jointe:{" "}
+          </Text>
+          <a href={props.file} target="_blank" rel="noreferrer">
+            Télécharger
+          </a>
+        </Text>
+      {/* } */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}

@@ -21,7 +21,7 @@ import {
   limit,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { db, storage } from "../firebase/config";
 import { AuthContext } from "../context/authContext";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
@@ -31,12 +31,13 @@ import { ChevronDownIcon,ChevronRightIcon } from '@chakra-ui/icons';
 import ReactPaginate from "react-paginate";
 import { Center } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
+import {ref, getDownloadURL, uploadBytes  } from "firebase/storage";
 
 export default function Reports() {
   const { user, userData } = useContext(AuthContext);
   const [myReports, setMyReports] = useState([]);
   const [initialReports, setInitialReports] = useState([]);
-    const [initialReport, setInitialReport] = useState([]);
+  const [initialReport, setInitialReport] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -48,7 +49,7 @@ export default function Reports() {
   const [affectedReports, setAffectedReports] = useState([]);
   const [reportAdmin, setReportAdmin] = useState([]);
     const [groupeName, setGroupeName] = useState([]);
-      let admReports = [...reportAdmin];
+    let admReports = [...reportAdmin];
 
 
   console.log("nameGroupe")
@@ -76,8 +77,8 @@ console.log(groupeName)
       [group]: value
     }));
 
-console.log(group)
-console.log(value)
+    console.log(group)
+    console.log(value)
 
 
 
@@ -140,13 +141,13 @@ if(filterValues.group2 === name){
       sortedMyReports = initialReports
       .filter(report => {
         const createdAt = report.data().createdAt.toDate().toISOString().split("T")[0]
-        return createdAt >= dateDebut&& createdAt <= dateFin;
+        return createdAt >= dateDebut && createdAt <= dateFin;
       });
 
-            admReports = initialReport
+     admReports = initialReport
       .filter(report => {
         const createdAt = report.value.data().createdAt.toDate().toISOString().split("T")[0]
-        return createdAt >= dateDebut&& createdAt <= dateFin;
+        return createdAt >= dateDebut && createdAt <= dateFin;
       });
     }
     setMyReports(sortedMyReports)
@@ -163,10 +164,6 @@ if(filterValues.group2 === name){
   }, [user]);
 
 
-
-
-
-
   useEffect(() => {
        setIsPending(true);
 
@@ -174,7 +171,7 @@ if(filterValues.group2 === name){
 
             //foncton pour lister les rapports affectees
         const getMyGroups = async () => {
-console.log("groupeeeeeee")
+         console.log("groupeeeeeee")
         // const q = query(
         //     collection(db, "groups"),
         //     limit(50)
@@ -185,7 +182,7 @@ console.log("groupeeeeeee")
             const queryUsers = await getDocs(collection(db, "users"));
             const querySnapshot = await getDocs(collection(db, "groups"));
             const queryReports = await getDocs(collection(db, "reports"));
-    userData.affectedGroup.forEach((group)=>{
+        userData.affectedGroup.forEach((group)=>{
 
         queryReports.docs.forEach((reportDoc) => {
           if(reportDoc.data().groupeId === group.value){
@@ -226,7 +223,6 @@ console.log("groupeeeeeee")
 
   const getReportsByGroup = async () => {
  
-
     try {
             const groupsSnapshot = await getDocs(collection(db, "groups"));
 //       const usersSnapshot = await getDocs(collection(db, "users"));
@@ -286,14 +282,16 @@ console.log("groupeeeeeee")
     }
   };
 
+      const getMyReports = async () => {
 
-    const getMyReports = async () => {
+        // try{ 
       const q = query(
         collection(db, "reports"),
         where("uid", "==", user.uid),
         orderBy("createdAt", "desc"),
         limit(16)
       );
+
       const qAdmin = query(
         collection(db, "reports"),
         orderBy("createdAt", "desc"),
@@ -316,8 +314,22 @@ console.log("groupeeeeeee")
       } else {
         try {
           const querySnapshot = await getDocs(q);
-          // console.log(querySnapshot.docs[0].data());
+          // const reportList = [];
+          // // console.log(querySnapshot.docs[0].data());
+          // for (const doc of querySnapshot.docs) {
+          //   // const data = doc.data();
+          //   const fileRef = ref(storage, doc.data().filePath);
+          //   const downloadURL = await getDownloadURL(fileRef);
+          //   reportList.push({
+          //     id: doc.id,
+          //     name: doc.data().userLastName,
+          //     fileURL: downloadURL,
+          //   });
+          // }
           setMyReports(querySnapshot.docs);
+          // console.log("liste des rapports", reportList);
+          // setMyReports( reportList)
+
           setInitialReports(querySnapshot.docs);
           setIsPending(false);
         } catch (error) {
@@ -333,7 +345,19 @@ console.log("groupeeeeeee")
 
 
   }, []);
-
+console.log(myReports);
+  // recuperation et telechargement des fichiers sur firebase
+  // const downloadFile = (fileURL) => {
+  //   // Téléchargement du fichier à partir du stockage Firebase
+  //   const storageRef = storage().refFromURL(fileURL);
+  //   storageRef.getDownloadURL().then((url) => {
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.target = '_blank';
+  //     link.download = url.substr(url.lastIndexOf('/') + 1);
+  //     link.click();
+  //   });
+  // };
 
   //Conditions pour le tri par Statut
 
@@ -434,8 +458,8 @@ console.log("groupeeeeeee")
         .map((report) => (
           <Fragment key={report.value.id}>
             <DashboardDayReport
-            groupe={report.label}
-            uid={user.uid}
+              groupe={report.label}
+              uid={user.uid}
               id={report.value.id}
               name={report.value.data().userLastName}
               isReaded={report.value.data().isReaded}
@@ -450,12 +474,12 @@ console.log("groupeeeeeee")
                   month: "long",
                 })}
               hour={report.value.data().createdAt.toDate().toLocaleTimeString()}
+              file={report.valuefileURL}
             />
           </Fragment>
         ))}
 
             
-          
         {isPending && (
           <Fragment>
             <Skeleton height="100px" rounded="md" />
@@ -519,6 +543,7 @@ console.log("groupeeeeeee")
               id={report.id}
               name={userData.isAdmin === "admin" ? report.data().userFirstName : ""}
               isReaded={report.data().isReaded}
+              // title={report.value.data().title}
               body={report.data().report}
               difficulties={report.data().difficulty}
               date={report
@@ -678,8 +703,8 @@ console.log("groupeeeeeee")
         .map((report) => (
           <Fragment key={report.value.id}>
             <DashboardDayReport
-            groupe={report.label}
-            uid={user.uid}
+              groupe={report.label}
+              uid={user.uid}
               id={report.value.id}
               name={report.value.data().userLastName}
               isReaded={report.value.data().isReaded}
