@@ -65,12 +65,12 @@ export default function DashboardDayReport(props) {
           {props.date} à {props.hour}
         </Text>
       </Text>
-      <Text noOfLines={3}>
+      {/* <Text noOfLines={3}>
         <Text as="span" fontWeight="bold">
           Titre:{" "}
         </Text>
-        {/* {props.title} */} ..
-      </Text>
+        {/* {props.title}.. */} 
+      {/* </Text> */} 
       <Text noOfLines={3}>
         <Text as="span" fontWeight="bold">
           Rapport:{" "}
