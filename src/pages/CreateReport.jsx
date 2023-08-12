@@ -151,7 +151,7 @@ export default function CreateReport() {
     });
     setReport("");
     setDifficulty("");
-    navigate("/reports")
+    // navigate("/reports")
     // console.log(docRef);
  
   };
